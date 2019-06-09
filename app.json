@@ -1,7 +1,7 @@
 {
-    "name": "Django VueJs Template",
+    "name": "corpus",
     "description": "",
-    "repository": "https://github.com/gtalarico/django-vue-template",
+    "repository": "https://github.com/corpus-bilimsel-arastirma-projesi/corpus",
     "keywords": ["django", "vue", "vuejs", "template", "django rest framework"],
     "env": {
       "DJANGO_SETTINGS_MODULE": {
