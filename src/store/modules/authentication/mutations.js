@@ -1,13 +1,14 @@
-const updateToken = (state, newToken) => {
-  localStorage.setItem('t', newToken);
-  state.jwt = newToken;
+const UPDATE_TOKEN = (state, newToken) => {
+  localStorage.setItem('t', newToken)
+  state.JWT = newToken
 }
-const removeToken = (state) => {
-  localStorage.removeItem('t');
-  state.jwt = null;
+
+const REMOVE_TOKEN = (state) => {
+  localStorage.removeItem('t')
+  state.JWT = null
 }
 
 export default {
-  updateToken,
-  removeToken
-};
+  UPDATE_TOKEN,
+  REMOVE_TOKEN
+}

@@ -3,10 +3,14 @@
     <v-toolbar-title>Corpus Operations</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
+
       <v-btn flat v-on:click="goToHome">Home</v-btn>
+
       <v-btn flat v-on:click="goToOperations">Operations</v-btn>
 
-      <v-menu offset-y>
+      <v-btn v-if="this.$store.getters.JWT" flat v-on:click="goToProfile">Profile</v-btn>
+
+      <v-menu v-else offset-y>
         <template v-slot:activator="{ on }">
           <v-btn
               flat
@@ -46,6 +50,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     data: () => ({
       items: [
@@ -60,11 +66,17 @@
       ]
     }),
     methods: {
+      ...mapGetters({
+        JWT: 'JWT'
+      }),
       goToHome() {
         this.$router.push({path: '/'})
       },
       goToOperations() {
         this.$router.push({path: '/operations'})
+      },
+      goToProfile() {
+        this.$router.push({path: '/profile'})
       },
       routeToGiven(title) {
         if (title === 'Sign Up') {
@@ -75,6 +87,8 @@
           this.$router.push({path: '/'})
         } else if (title === 'Operations') {
           this.$router.push({path: 'operations'})
+        } else if (title === 'Profile') {
+          this.$router.push({path: 'profile'})
         }
       }
     }

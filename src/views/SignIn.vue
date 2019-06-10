@@ -56,13 +56,15 @@
 </template>
 
 <script>
+  import {mapActions} from "vuex";
+
   export default {
     data: () => ({
       valid: true,
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be greater than 6 characters'
+        v => (v && v.length >= 5) || 'Password must be greater than 6 characters'
       ],
       email: '',
       emailRules: [
@@ -72,13 +74,19 @@
       checkbox: false
     }),
     methods: {
-      async validate() {
+      ...mapActions({
+        OBTAIN_TOKEN: 'OBTAIN_TOKEN'
+      }),
+      validate() {
         if (this.$refs.form.validate()) {
           this.snackbar = true
 
-          console.log(`Email is: ${this.email} and Password is: ${this.password}`)
-          console.log(`We use obtainToken`)
-          this.$store.dispatch('obtainToken', this.email, this.password).then()
+          this.OBTAIN_TOKEN({
+            username: 'admin',
+            password: this.password
+          })
+
+          this.$router.push({path: '/profile'})
 
         }
       },

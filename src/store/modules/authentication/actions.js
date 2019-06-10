@@ -1,44 +1,39 @@
-import axios from "axios";
 import authenticationService from '@/services/authenticationService' // TODO: Will be used, when it is completed
 import jwt_decode from 'jwt-decode'
 
-const obtainToken = (username, password) => {
-  const payload = {
-    username: username,
-    password: password
-  }
-  axios.post(this.state.endpoints.obtainJWT, payload)
-    .then((response) => {
-      console.log(`We will update token with using obtainJWT endpoint as ${response.data.token}`)
-      this.commit('updateToken', response.data.token);
+const OBTAIN_TOKEN = (state, payload) => {
+  authenticationService.postObtainToken(payload)
+    .then(res => {
+      console.log(`We will update token with using obtainJWT endpoint as ${res.access}`)
+      state.commit('UPDATE_TOKEN', res.access); // response.data.token -> access or refresh
     })
-    .catch((error) => {
-      console.log(error);
+    .catch(err => {
+      console.log(err)
     })
 }
 
-const refreshToken = () => {
+const REFRESH_TOKEN = (state) => {
   const payload = {
-    token: this.state.jwt
+    token: state.JWT
   }
-  axios.post(this.state.endpoints.refreshJWT, payload)
-    .then((response) => {
-      console.log(`We will update token with using refreshJWT endpoint as ${response.data.token}`)
-      this.commit('updateToken', response.data.token)
+  authenticationService.postRefreshToken(payload)
+    .then(res => {
+      console.log(`We will update token with using refreshJWT endpoint as ${res.token}`) // TODO: Decide which one is it access or refresh?
+      state.commit('UPDATE_TOKEN', res.token)
     })
-    .catch((error) => {
-      console.log(error)
+    .catch(err => {
+      console.log(err)
     })
 }
 
-const inspectToken = () => { // TODO: This method will be used to check token is expired
-  const token = this.state.jwt;
+const INSPECT_TOKEN = (state) => { // TODO: This method will be used to check token is expired
+  const token = state.JWT;
   if (token) {
-    const decoded = jwt_decode(token);
+    const decoded = jwt_decode(token)
     const exp = decoded.exp
-    const orig_iat = decode.orig_iat
+    const orig_iat = decode.orig_iat // TODO: decode.orig_iat ? What is that?
     if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - orig_iat < 628200) {
-      this.dispatch('refreshToken')
+      state.dispatch('REFRESH_TOKEN')
     } else if (exp - (Date.now() / 1000) < 1800) {
       // DO NOTHING, DO NOT REFRESH
     } else {
@@ -48,7 +43,7 @@ const inspectToken = () => { // TODO: This method will be used to check token is
 }
 
 export default {
-  obtainToken,
-  refreshToken,
-  inspectToken
+  OBTAIN_TOKEN,
+  REFRESH_TOKEN,
+  INSPECT_TOKEN
 };
