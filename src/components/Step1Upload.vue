@@ -39,7 +39,7 @@
   export default {
     data: () => ({
       dropOptions: {
-        url: "http://127.0.0.1:8000/api/upload/",
+        url: "https://localhost:8000/api/upload/",
         maxFilesize: 5, // MB
         maxFiles: 4,
         chunking: false,

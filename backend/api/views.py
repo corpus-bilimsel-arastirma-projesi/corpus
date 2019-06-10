@@ -12,7 +12,6 @@ import json
 
 index_view = never_cache(TemplateView.as_view(template_name='index.html'))
 
-
 class UploadFile(APIView):
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = (AllowAny,)

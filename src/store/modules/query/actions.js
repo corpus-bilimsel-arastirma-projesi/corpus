@@ -2,7 +2,7 @@ import axios from "axios";
 
 const QUERY_DATABASE = async (context, payload) => {
   let tempArray = []
-  let {data} = await axios.post("http://127.0.0.1:8000/api/query/", {query: payload})
+  let {data} = await axios.post("https://localhost:8000/api/query/", {query: payload})
   let temp = JSON.parse(data)
   temp.data.forEach(x => {
     tempArray.push(x.filename)

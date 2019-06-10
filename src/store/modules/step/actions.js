@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const CLEAN_PARAMETERS = async (context, payload) => {
-  await axios.post('http://127.0.0.1:8000/api/cleaning/', {
+  await axios.post('https://localhost:8000/api/cleaning/', {
     uuid: payload[0],
     checkboxes: payload[1],
     mostCommon: payload[2],
