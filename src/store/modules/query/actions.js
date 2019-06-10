@@ -1,8 +1,8 @@
-import axios from "axios";
+import queryService from '@/services/queryService'
 
 const QUERY_DATABASE = async (context, payload) => {
   let tempArray = []
-  let {data} = await axios.post("https://corpuslive.herokuapp.com/api/query/", {query: payload})
+  let data = await queryService.postFileNames({query: payload})
   let temp = JSON.parse(data)
   temp.data.forEach(x => {
     tempArray.push(x.filename)

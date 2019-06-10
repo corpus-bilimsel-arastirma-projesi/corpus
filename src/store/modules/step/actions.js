@@ -1,41 +1,44 @@
-import axios from "axios";
+import stepService from '@/services/stepService'
 
 const CLEAN_PARAMETERS = async (context, payload) => {
-  await axios.post('https://corpuslive.herokuapp.com/api/cleaning/', {
+
+  let response = await stepService.postCleaningStep({
     uuid: payload[0],
     checkboxes: payload[1],
     mostCommon: payload[2],
-  }).then((response) => {
-    if (response.status === 200) {
-      let payload = []
-      let table = []
-      let wordCloud = []
-      let temp = 1
-      response.data.forEach(x => {
-        payload.push({key: x[0], value: parseInt(x[1])})
-        table.push({number: temp, word: x[0], frequency: parseInt(x[1])})
-        wordCloud.push({
-          text: x[0],
-          weight: parseInt(x[1]),
-          rotation: 1,
-          rotationUnit: 'turn',
-          fontFamily: 'Anton',
-          fontStyle: 'italic', // normal|italic|oblique|initial|inherit
-          fontVariant: '', // normal|small-caps|initial|inherit
-          fontWeight: '', // normal|bold|bolder|lighter|number|initial|inherit
-          color: '#' + (Math.random().toString(16) + "000000").substring(2, 8)
-        })
-        temp = temp + 1
-      })
-      context.commit("SET_WORD_CLOUD", wordCloud)
-      context.commit("SET_JSON_TABLE", table)
-      context.commit("SET_JSON_FILE", payload)
-      context.commit("SET_READY", true)
-      return 200
-    } else {
-      return 404
-    }
   })
+
+  console.log(response)
+
+  if (response.status === 200) {
+    let payload = []
+    let table = []
+    let wordCloud = []
+    let temp = 1
+    response.data.forEach(x => {
+      payload.push({key: x[0], value: parseInt(x[1])})
+      table.push({number: temp, word: x[0], frequency: parseInt(x[1])})
+      wordCloud.push({
+        text: x[0],
+        weight: parseInt(x[1]),
+        rotation: 1,
+        rotationUnit: 'turn',
+        fontFamily: 'Anton',
+        fontStyle: 'italic', // normal|italic|oblique|initial|inherit
+        fontVariant: '', // normal|small-caps|initial|inherit
+        fontWeight: '', // normal|bold|bolder|lighter|number|initial|inherit
+        color: '#' + (Math.random().toString(16) + "000000").substring(2, 8)
+      })
+      temp = temp + 1
+    })
+    context.commit("SET_WORD_CLOUD", wordCloud)
+    context.commit("SET_JSON_TABLE", table)
+    context.commit("SET_JSON_FILE", payload)
+    context.commit("SET_READY", true)
+    return 200
+  } else {
+    return 404
+  }
 };
 
 const SET_HANDLE = (context, payload) => {

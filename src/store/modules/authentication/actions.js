@@ -1,4 +1,5 @@
 import axios from "axios";
+import authenticationService from '@/services/authenticationService' // TODO: Will be used, when it is completed
 import jwt_decode from 'jwt-decode'
 
 const obtainToken = (username, password) => {

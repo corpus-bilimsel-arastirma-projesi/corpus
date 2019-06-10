@@ -35,11 +35,12 @@
   import 'vue2-dropzone/dist/vue2Dropzone.min.css'
   import { uuid } from 'vue-uuid';
   import {mapMutations} from 'vuex'
+  import api from '@/services/api'
 
   export default {
     data: () => ({
       dropOptions: {
-        url: "https://corpuslive.herokuapp.com/api/upload/",
+        url: api.defaults.baseURL + "/upload/",
         maxFilesize: 5, // MB
         maxFiles: 4,
         chunking: false,
