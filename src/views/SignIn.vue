@@ -15,6 +15,7 @@
       <v-text-field
           v-model="password"
           :counter="20"
+          type="password"
           :rules="passwordRules"
           label="Password"
           required
@@ -55,8 +56,6 @@
 </template>
 
 <script>
-
-
   export default {
     data: () => ({
       valid: true,
@@ -72,11 +71,15 @@
       ],
       checkbox: false
     }),
-
     methods: {
-      validate() {
+      async validate() {
         if (this.$refs.form.validate()) {
           this.snackbar = true
+
+          console.log(`Email is: ${this.email} and Password is: ${this.password}`)
+          console.log(`We use obtainToken`)
+          this.$store.dispatch('obtainToken', this.email, this.password).then()
+
         }
       },
       reset() {

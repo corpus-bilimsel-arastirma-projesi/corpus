@@ -23,6 +23,7 @@
       <v-text-field
           v-model="password"
           :counter="20"
+          type="password"
           :rules="passwordRules"
           label="Password"
           required
@@ -64,8 +65,6 @@
 </template>
 
 <script>
-
-
   export default {
     data: () => ({
       valid: true,
@@ -86,12 +85,13 @@
       ],
       checkbox: false
     }),
-
     methods: {
       validate() {
-        if (this.$refs.form.validate()) {
+        if (this.$refs.form.validate()) { // this.$refs.form.validate() && (this.snackbar = true)
           this.snackbar = true
+          console.log('Inside IF')
         }
+        console.log('Outside IF')
       },
       reset() {
         this.$refs.form.reset()
