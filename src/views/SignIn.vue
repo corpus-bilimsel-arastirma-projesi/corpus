@@ -86,7 +86,7 @@
             password: this.password
           })
 
-          this.$router.push({path: '/profile'})
+          this.$router.replace({path: '/profile'})
 
         }
       },

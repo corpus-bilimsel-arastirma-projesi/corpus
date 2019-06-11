@@ -33,7 +33,7 @@
 
         console.log(`Token is removed as you can see => ${this.$store.getters.JWT}`)
 
-        this.$router.push({path: '/sign-in'})
+        this.$router.replace({path: '/sign-in'})
 
         // this.INSPECT_TOKEN()
       }

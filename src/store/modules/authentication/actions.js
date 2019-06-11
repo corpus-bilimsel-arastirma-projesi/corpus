@@ -39,7 +39,7 @@ const INSPECT_TOKEN = (state) => { // TODO: This method will be used to check to
     } else {
       // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
       state.commit('REMOVE_TOKEN')
-      this.$router.push({path: '/sign-in'})
+      this.$router.replace({path: '/sign-in'})
     }
   }
 }
