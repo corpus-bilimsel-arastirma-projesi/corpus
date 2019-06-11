@@ -70,25 +70,25 @@
         JWT: 'JWT'
       }),
       goToHome() {
-        this.$router.push({path: '/'})
+        this.$router.replace({path: '/'})
       },
       goToOperations() {
-        this.$router.push({path: '/operations'})
+        this.$router.replace({path: '/operations'})
       },
       goToProfile() {
-        this.$router.push({path: '/profile'})
+        this.$router.replace({path: '/profile'})
       },
       routeToGiven(title) {
         if (title === 'Sign Up') {
-          this.$router.push({path: 'sign-up'})
+          this.$router.replace({path: 'sign-up'})
         } else if (title === 'Sign In') {
-          this.$router.push({path: 'sign-in'})
+          this.$router.replace({path: 'sign-in'})
         } else if (title === 'Home') {
-          this.$router.push({path: '/'})
+          this.$router.replace({path: '/'})
         } else if (title === 'Operations') {
-          this.$router.push({path: 'operations'})
+          this.$router.replace({path: 'operations'})
         } else if (title === 'Profile') {
-          this.$router.push({path: 'profile'})
+          this.$router.replace({path: 'profile'})
         }
       }
     }
