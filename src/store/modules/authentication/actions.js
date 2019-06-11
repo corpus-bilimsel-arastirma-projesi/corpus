@@ -18,8 +18,8 @@ const REFRESH_TOKEN = (state) => {
   }
   authenticationService.postRefreshToken(payload)
     .then(res => {
-      console.log(`We will update token with using refreshJWT endpoint as ${res.token}`) // TODO: Decide which one is it access or refresh?
-      state.commit('UPDATE_TOKEN', res.token)
+      console.log(`We will update token with using refreshJWT endpoint as ${res.refresh}`) // TODO: Decide which one is it access or refresh?
+      state.commit('UPDATE_TOKEN', res.refresh)
     })
     .catch(err => {
       console.log(err)
@@ -27,7 +27,7 @@ const REFRESH_TOKEN = (state) => {
 }
 
 const INSPECT_TOKEN = (state) => { // TODO: This method will be used to check token is expired
-  const token = state.JWT;
+  const token = state.getters.JWT;
   if (token) {
     const decoded = jwt_decode(token)
     const exp = decoded.exp
@@ -38,6 +38,8 @@ const INSPECT_TOKEN = (state) => { // TODO: This method will be used to check to
       // DO NOTHING, DO NOT REFRESH
     } else {
       // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
+      state.commit('REMOVE_TOKEN')
+      this.$router.push({path: '/sign-in'})
     }
   }
 }

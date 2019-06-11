@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import {mapGetters, mapMutations} from "vuex";
+  import {mapActions, mapGetters, mapMutations} from "vuex";
 
   export default {
     data() {
@@ -24,12 +24,18 @@
       ...mapGetters({
         JWT: 'JWT'
       }),
+      ...mapActions({
+        REFRESH_TOKEN: 'REFRESH_TOKEN',
+        INSPECT_TOKEN: 'INSPECT_TOKEN'
+      }),
       logOut() {
         this.REMOVE_TOKEN()
 
         console.log(`Token is removed as you can see => ${this.$store.getters.JWT}`)
 
         this.$router.push({path: '/sign-in'})
+
+        // this.INSPECT_TOKEN()
       }
     }
   }
