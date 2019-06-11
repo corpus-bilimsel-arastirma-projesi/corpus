@@ -26,6 +26,10 @@ from .api.views import index_view
 
 urlpatterns = [
     path('', index_view, name='index'),
+    path('operations/', index_view, name='index'),
+    path('profile/', index_view, name='index'),
+    path('sign-in/', index_view, name='index'),
+    path('sign-up/', index_view, name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('backend.api.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
