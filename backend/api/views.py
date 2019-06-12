@@ -1,16 +1,19 @@
+from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.cache import never_cache
-from .serializers import FileSerializer
+from .serializers import FileSerializer, UserSerializer
 from backend.nlp.bapCleanAndTokenize import clean_and_tokenize, clean_and_tokenize_v2
 from .models import File
 import json
 
 index_view = never_cache(TemplateView.as_view(template_name='index.html'))
+
 
 class UploadFile(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -59,10 +62,7 @@ class Query(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class Test(APIView):
+class CreateUserView(CreateAPIView):
+    model = get_user_model()
     permission_classes = (AllowAny,)
-
-    # https://www.django-rest-framework.org/api-guide/permissions/
-
-    def get(self, request, format=None):
-        return Response("asfasd", status=status.HTTP_200_OK)
+    serializer_class = UserSerializer
