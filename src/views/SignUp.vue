@@ -80,11 +80,10 @@
       validate() {
         if (this.$refs.form.validate()) { // this.$refs.form.validate() && (this.snackbar = true)
           this.snackbar = true
-          let payload = []
-          payload.push({
+          var payload = {
             username: this.email,
             password: this.password
-          })
+          }
           authenticationService.postSignup(payload).then(x => console.log(x))
           console.log('Inside IF')
         }
