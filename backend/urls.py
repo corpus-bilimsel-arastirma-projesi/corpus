@@ -18,21 +18,18 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+
 from .api.views import index_view
 
 urlpatterns = [
-    path('', index_view, name='index'),
-    path('operations/', index_view, name='index'),
-    path('profile/', index_view, name='index'),
-    path('sign-in/', index_view, name='index'),
-    path('sign-up/', index_view, name='index'),
-
     path('admin/', admin.site.urls),
     path('api/', include('backend.api.urls')),
+
+    # Django runs through each URL pattern, in order,
+    # and stops at the first one that matches the requested URL.
+    # r'^.*$' means any string
+    # so if it is not admin or api it will goes frontend
+    path(r'^.*$', index_view, name='index'),
 ]
 
 if settings.DEBUG:
