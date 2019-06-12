@@ -69,7 +69,7 @@
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
+        // v => /.+@.+/.test(v) || 'E-mail must be valid' // TODO: Will be decided email or username or both
       ],
       checkbox: false
     }),
@@ -82,7 +82,7 @@
           this.snackbar = true
 
           this.OBTAIN_TOKEN({
-            username: 'admin',
+            username: this.email,
             password: this.password
           })
 

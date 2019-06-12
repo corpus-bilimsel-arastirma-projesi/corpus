@@ -5,7 +5,8 @@ const OBTAIN_TOKEN = (state, payload) => {
   authenticationService.postObtainToken(payload)
     .then(res => {
       console.log(`We will update token with using obtainJWT endpoint as ${res.access}`)
-      state.commit('UPDATE_TOKEN', res.access); // response.data.token -> access or refresh
+      let payload = [res.access, res.refresh]
+      state.commit('UPDATE_TOKEN', payload); // response.data.token -> access or refresh
     })
     .catch(err => {
       console.log(err)
@@ -14,12 +15,13 @@ const OBTAIN_TOKEN = (state, payload) => {
 
 const REFRESH_TOKEN = (state) => {
   const payload = {
-    token: state.JWT
+    token: state.getters.JWT_REFRESH
   }
   authenticationService.postRefreshToken(payload)
     .then(res => {
       console.log(`We will update token with using refreshJWT endpoint as ${res.refresh}`) // TODO: Decide which one is it access or refresh?
-      state.commit('UPDATE_TOKEN', res.refresh)
+      let payload = [res.access, state.getters.JWT_REFRESH]
+      state.commit('UPDATE_TOKEN', payload)
     })
     .catch(err => {
       console.log(err)
@@ -27,7 +29,7 @@ const REFRESH_TOKEN = (state) => {
 }
 
 const INSPECT_TOKEN = (state) => { // TODO: This method will be used to check token is expired
-  const token = state.getters.JWT;
+  const token = state.getters.JWT_ACCESS;
   if (token) {
     const decoded = jwt_decode(token)
     const exp = decoded.exp

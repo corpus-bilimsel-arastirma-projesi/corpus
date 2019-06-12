@@ -99,6 +99,7 @@
         this.SET_UUID(uuid)
         formData.append('remark', "Hello World")
         formData.append('uuid', uuid)
+        formData.append('jwt', this.$store.getters.JWT_ACCESS)
       }
     }
   };

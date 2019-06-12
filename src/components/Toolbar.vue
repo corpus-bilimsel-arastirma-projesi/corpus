@@ -8,7 +8,7 @@
 
       <v-btn flat v-on:click="goToOperations">Operations</v-btn>
 
-      <v-btn v-if="this.$store.getters.JWT" flat v-on:click="goToProfile">Profile</v-btn>
+      <v-btn v-if="this.$store.getters.JWT_ACCESS" flat v-on:click="goToProfile">Profile</v-btn>
 
       <v-menu v-else offset-y>
         <template v-slot:activator="{ on }">
@@ -62,7 +62,8 @@
         {title: 'Home'},
         {title: 'Operations'},
         {title: 'Sign Up'},
-        {title: 'Sign In'}
+        {title: 'Sign In'},
+        {title: 'Profile'}
       ]
     }),
     methods: {
