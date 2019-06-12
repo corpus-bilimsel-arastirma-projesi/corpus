@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import include
+from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -29,7 +29,7 @@ urlpatterns = [
     # and stops at the first one that matches the requested URL.
     # r'^.*$' means any string
     # so if it is not admin or api it will goes frontend
-    path(r'^.*$', index_view, name='index'),
+    url(r'^.*$', index_view, name='index'),
 ]
 
 if settings.DEBUG:
