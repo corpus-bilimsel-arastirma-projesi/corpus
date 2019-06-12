@@ -81,15 +81,15 @@
       },
       routeToGiven(title) {
         if (title === 'Sign Up') {
-          this.$router.replace({path: 'sign-up'})
+          this.$router.replace({path: '/sign-up'})
         } else if (title === 'Sign In') {
-          this.$router.replace({path: 'sign-in'})
+          this.$router.replace({path: '/sign-in'})
         } else if (title === 'Home') {
           this.$router.replace({path: '/'})
         } else if (title === 'Operations') {
-          this.$router.replace({path: 'operations'})
+          this.$router.replace({path: '/operations'})
         } else if (title === 'Profile') {
-          this.$router.replace({path: 'profile'})
+          this.$router.replace({path: '/profile'})
         }
       }
     }
