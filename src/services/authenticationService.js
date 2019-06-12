@@ -8,5 +8,10 @@ export default {
   postRefreshToken(payload) {
     return api.post(`token/refresh/`, payload)
               .then(response => response.data)
+  },
+  postSignup(payload) {
+        return api.post(`user/signup/`, payload)
+              .then(response => response.data)
   }
+
 }
