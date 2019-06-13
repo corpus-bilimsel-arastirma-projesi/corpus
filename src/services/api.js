@@ -8,6 +8,6 @@ export default axios.create({ // TODO: Will be implemented with JWT
   // timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
-    'jwt': JWT_ACCESS
+    'Authorization': "Bearer "+JWT_ACCESS
   }
 })

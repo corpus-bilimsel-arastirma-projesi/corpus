@@ -49,7 +49,7 @@ class CleanWithParameters(APIView):
 
 
 class Query(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
         """
