@@ -1,13 +1,24 @@
 import axios from 'axios'
-// import Cookies from 'js-cookie'
+import {store} from '../store/store';
 
 let JWT_ACCESS = localStorage.getItem('a')
 
-export default axios.create({ // TODO: Will be implemented with JWT
+const http = axios.create({ // TODO: Will be implemented with JWT
   baseURL: '/api',
-  // timeout: 5000,
   headers: {
-    'Content-Type': 'application/json',
-    'Authorization': "Bearer "+JWT_ACCESS
+    'Content-Type': 'application/json'
   }
 })
+
+http.interceptors.request.use (
+  function (config) {
+    const token = store.token;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config
+  },
+  function (error) {
+    return Promise.reject (error)
+  }
+)
+
+export default http

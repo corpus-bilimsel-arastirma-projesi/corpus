@@ -1,60 +1,60 @@
 <template>
-    <v-container column>
-        <v-form
-                ref="form"
-                v-model="valid"
-                lazy-validation
+  <v-container column>
+    <v-form
+        ref="form"
+        v-model="valid"
+        lazy-validation
+    >
+
+      <v-text-field
+          v-model="email"
+          :rules="emailRules"
+          label="E-mail"
+          required
+      ></v-text-field>
+
+      <v-text-field
+          v-model="password"
+          :counter="20"
+          type="password"
+          :rules="passwordRules"
+          label="Password"
+          required
+      ></v-text-field>
+
+      <v-checkbox
+          v-model="checkbox"
+          :rules="[v => !!v || 'You must agree to continue!']"
+          label="Do you agree?"
+          required
+      ></v-checkbox>
+
+      <div>
+        <v-btn
+            @click="reset"
         >
+          Clear
+        </v-btn>
 
-            <v-text-field
-                    v-model="email"
-                    :rules="emailRules"
-                    label="E-mail"
-                    required
-            ></v-text-field>
+        <v-btn
+            style="float: right;"
+            :disabled="!valid"
+            color="success"
+            @click="validate"
+        >
+          Sign Up
+        </v-btn>
 
-            <v-text-field
-                    v-model="password"
-                    :counter="20"
-                    type="password"
-                    :rules="passwordRules"
-                    label="Password"
-                    required
-            ></v-text-field>
-
-            <v-checkbox
-                    v-model="checkbox"
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    label="Do you agree?"
-                    required
-            ></v-checkbox>
-
-            <div>
-                <v-btn
-                        @click="reset"
-                >
-                    Clear
-                </v-btn>
-
-                <v-btn
-                        style="float: right;"
-                        :disabled="!valid"
-                        color="success"
-                        @click="validate"
-                >
-                    Sign Up
-                </v-btn>
-
-                <v-btn
-                        v-if="false"
-                        color="warning"
-                        @click="resetValidation"
-                >
-                    Reset Validation
-                </v-btn>
-            </div>
-        </v-form>
-    </v-container>
+        <v-btn
+            v-if="false"
+            color="warning"
+            @click="resetValidation"
+        >
+          Reset Validation
+        </v-btn>
+      </div>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
