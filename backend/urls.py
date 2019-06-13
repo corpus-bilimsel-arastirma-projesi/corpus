@@ -32,5 +32,5 @@ urlpatterns = [
     re_path(r'^.*$', index_view, name='index'),
 ]
 
-if True:  # [EXPERIMENTAL]
+if settings.DEBUG:
     urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + urlpatterns
