@@ -4,11 +4,11 @@
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
 
-      <v-btn flat v-on:click="goToHome">Home</v-btn>
+      <v-btn flat to="/">Home</v-btn>
 
-      <v-btn flat v-on:click="goToOperations">Operations</v-btn>
+      <v-btn flat to="/operations">Operations</v-btn>
 
-      <v-btn v-if="this.$store.getters.JWT_ACCESS" flat v-on:click="goToProfile">Profile</v-btn>
+      <v-btn v-if="$store.getters.JWT_ACCESS" flat to="/profile">Profile</v-btn>
 
       <v-menu v-else offset-y>
         <template v-slot:activator="{ on }">
@@ -23,7 +23,7 @@
           <v-list-tile
               v-for="(item, index) in items"
               :key="index"
-              @click="routeToGiven(item.title)"
+              :to="item.link"
           >
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile>
@@ -38,7 +38,7 @@
         <v-list-tile
             v-for="(item, index) in mobileItems"
             :key="index"
-            @click="routeToGiven(item.title)">
+            :to="item.link">
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
@@ -50,49 +50,21 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
 
   export default {
     data: () => ({
       items: [
-        {title: 'Sign Up'},
-        {title: 'Sign In'}
+        {title: 'Sign Up', link: '/sign-up'},
+        {title: 'Sign In', link: '/sign-in'}
       ],
       mobileItems: [
-        {title: 'Home'},
-        {title: 'Operations'},
-        {title: 'Sign Up'},
-        {title: 'Sign In'},
-        {title: 'Profile'}
+        {title: 'Home', link: '/'},
+        {title: 'Operations', link: '/operations'},
+        {title: 'Sign Up', link: '/sign-up'},
+        {title: 'Sign In', link: '/sign-in'},
+        {title: 'Profile', link: '/profile'}
       ]
     }),
-    methods: {
-      ...mapGetters({
-        JWT: 'JWT'
-      }),
-      goToHome() {
-        this.$router.replace({path: '/'})
-      },
-      goToOperations() {
-        this.$router.replace({path: '/operations'})
-      },
-      goToProfile() {
-        this.$router.replace({path: '/profile'})
-      },
-      routeToGiven(title) {
-        if (title === 'Sign Up') {
-          this.$router.replace({path: '/sign-up'})
-        } else if (title === 'Sign In') {
-          this.$router.replace({path: '/sign-in'})
-        } else if (title === 'Home') {
-          this.$router.replace({path: '/'})
-        } else if (title === 'Operations') {
-          this.$router.replace({path: '/operations'})
-        } else if (title === 'Profile') {
-          this.$router.replace({path: '/profile'})
-        }
-      }
-    }
   }
 </script>
 
