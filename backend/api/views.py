@@ -85,3 +85,13 @@ class CreateUserView(APIView):
             return Response({'success': True, 'token': token})
         except Exception:
             return Response({'success': False})
+
+
+class GetFilesOfUser(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        query_set = File.objects.filter(user=request.user)
+        dictionaries = [obj.as_dict() for obj in query_set]
+        data = json.dumps({"data": dictionaries})
+        return Response(data, status=status.HTTP_200_OK)

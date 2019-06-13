@@ -12,5 +12,6 @@ class File(models.Model):
     def as_dict(self):
         return {
             "id": self.id,
-            "filename": str(self.file)
+            "filename": str(self.file),
+            "timestamp": self.timestamp,
         }
