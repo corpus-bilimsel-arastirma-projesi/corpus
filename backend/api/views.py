@@ -17,15 +17,17 @@ index_view = never_cache(TemplateView.as_view(template_name='index.html'))
 
 class UploadFile(APIView):
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
+
+        request.data['user'] = request.user.id
+
         file_serializer = FileSerializer(data=request.data)
         if file_serializer.is_valid():
 
             file_serializer.save()
             data = clean_and_tokenize(request.data['file'])
-            # return Response(file_serializer.data, status=status.HTTP_201_CREATED)
 
             return Response(data, status=status.HTTP_201_CREATED)
         else:
@@ -55,6 +57,8 @@ class Query(APIView):
         """
         Return a list of all users.
         """
+        print(request.user.username)
+
         query = request.data['query']
         query_set = File.objects.filter(file__contains=query)
         dictionaries = [obj.as_dict() for obj in query_set]

@@ -33,14 +33,16 @@
 <script>
   import vueDropzone from "vue2-dropzone";
   import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-  import { uuid } from 'vue-uuid';
+  import {uuid} from 'vue-uuid';
   import {mapMutations} from 'vuex'
   import api from '@/services/api'
+  import {store} from '../store/store';
 
   export default {
     data: () => ({
       dropOptions: {
         url: api.defaults.baseURL + "/upload/",
+        headers: {Authorization: `Bearer ${store.token}`},
         maxFilesize: 5, // MB
         maxFiles: 4,
         chunking: false,

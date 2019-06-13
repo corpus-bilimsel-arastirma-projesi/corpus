@@ -25,12 +25,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('backend.api.urls')),
 
+    # [Experimental]
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     # Django runs through each URL pattern, in order,
     # and stops at the first one that matches the requested URL.
     # r'^.*$' means any string
     # so if it is not admin or api it will goes to frontend
     re_path(r'^.*$', index_view, name='index'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
