@@ -1,13 +1,14 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.views.generic import TemplateView
-from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.cache import never_cache
-from .serializers import FileSerializer, UserSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .serializers import FileSerializer
 from backend.nlp.bapCleanAndTokenize import clean_and_tokenize, clean_and_tokenize_v2
 from .models import File
 import json
@@ -66,7 +67,21 @@ class Query(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class CreateUserView(CreateAPIView):
-    model = get_user_model()
+class CreateUserView(APIView):
     permission_classes = (AllowAny,)
-    serializer_class = UserSerializer
+
+    def post(self, request):
+        username = request.data['username']
+        password = request.data['password']
+        try:
+            user = User.objects.create_user(username, password)
+
+            refresh = RefreshToken.for_user(user)
+
+            token = {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }
+            return Response({'success': True, 'token': token})
+        except Exception:
+            return Response({'success': False})
