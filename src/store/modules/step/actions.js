@@ -1,42 +1,70 @@
-import axios from "axios";
+import stepService from '@/services/stepService'
 
 const CLEAN_PARAMETERS = async (context, payload) => {
-  await axios.post('https://corpuslive.herokuapp.com/api/cleaning/', {
+
+  let res = await stepService.postCleaningStep({
     uuid: payload[0],
     checkboxes: payload[1],
     mostCommon: payload[2],
-  }).then((response) => {
-    if (response.status === 200) {
-      let payload = []
-      let table = []
-      let wordCloud = []
-      let temp = 1
-      response.data.forEach(x => {
-        payload.push({key: x[0], value: parseInt(x[1])})
-        table.push({number: temp, word: x[0], frequency: parseInt(x[1])})
-        wordCloud.push({
-          text: x[0],
-          weight: parseInt(x[1]),
-          rotation: 1,
-          rotationUnit: 'turn',
-          fontFamily: 'Anton',
-          fontStyle: 'italic', // normal|italic|oblique|initial|inherit
-          fontVariant: '', // normal|small-caps|initial|inherit
-          fontWeight: '', // normal|bold|bolder|lighter|number|initial|inherit
-          color: '#' + (Math.random().toString(16) + "000000").substring(2, 8)
-        })
-        temp = temp + 1
-      })
-      context.commit("SET_WORD_CLOUD", wordCloud)
-      context.commit("SET_JSON_TABLE", table)
-      context.commit("SET_JSON_FILE", payload)
-      context.commit("SET_READY", true)
-      return 200
-    } else {
-      return 404
+  })
+
+  let tempPayload = []
+  let table = []
+  let wordCloud = []
+  let temp = 1
+
+  res.forEach(x => {
+    tempPayload.push({key: x[0], value: parseInt(x[1])})
+    table.push({number: temp, word: x[0], frequency: parseInt(x[1])})
+    wordCloud.push({
+      text: x[0],
+      weight: parseInt(x[1]),
+      rotation: 1,
+      rotationUnit: 'turn',
+      fontFamily: 'Anton',
+      fontStyle: 'italic', // normal|italic|oblique|initial|inherit
+      fontVariant: '', // normal|small-caps|initial|inherit
+      fontWeight: '', // normal|bold|bolder|lighter|number|initial|inherit
+      color: '#' + (Math.random().toString(16) + "000000").substring(2, 8)
+    })
+    temp = temp + 1
+  })
+
+  context.commit("SET_WORD_CLOUD", wordCloud)
+  context.commit("SET_JSON_TABLE", table)
+  context.commit("SET_JSON_FILE", tempPayload)
+  context.commit("SET_READY", true)
+}
+
+const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
+  let res = await stepService.postFileNamesGivenUser({
+    user: payload
+  })
+
+  let USER_FILES = []
+
+  JSON.parse(res).data.forEach(x => USER_FILES.push({
+    id: x.id,
+    icon: 'assignment',
+    iconClass: 'blue white--text',
+    title: x.filename,
+    subtitle: Date.now()
+  }))
+
+  context.commit("SET_USER_FILES", USER_FILES)
+}
+
+const DELETE_FILE_GIVEN_USER = (context, payload) => {
+  return stepService.deleteGivenFileName({
+    data: {
+      id: payload
     }
   })
-};
+}
+
+const SET_USER_FILES = (context, payload) => {
+  context.commit("SET_USER_FILES", payload)
+}
 
 const SET_HANDLE = (context, payload) => {
   context.commit("SET_HANDLE", payload);
@@ -79,5 +107,8 @@ export default {
   SET_JSON_FILE,
   SET_JSON_TABLE,
   SET_WORD_CLOUD,
-  SET_READY
+  SET_READY,
+  GET_FILE_NAMES_GIVEN_USER,
+  SET_USER_FILES,
+  DELETE_FILE_GIVEN_USER
 };

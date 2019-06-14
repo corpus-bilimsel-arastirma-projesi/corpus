@@ -15,6 +15,7 @@
       <v-text-field
           v-model="password"
           :counter="20"
+          type="password"
           :rules="passwordRules"
           label="Password"
           required
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-
+  import {mapActions} from "vuex";
 
   export default {
     data: () => ({
@@ -63,7 +64,7 @@
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be greater than 6 characters'
+        v => (v && v.length >= 5) || 'Password must be greater than 6 characters'
       ],
       email: '',
       emailRules: [
@@ -72,11 +73,29 @@
       ],
       checkbox: false
     }),
-
     methods: {
-      validate() {
+      ...mapActions({
+        OBTAIN_TOKEN: 'OBTAIN_TOKEN',
+        SET_EMAIL: 'SET_EMAIL'
+      }),
+      async validate() {
         if (this.$refs.form.validate()) {
           this.snackbar = true
+
+          let status = await this.OBTAIN_TOKEN({
+            username: this.email,
+            password: this.password
+          })
+
+          if(status === 200) {
+
+            this.$router.push({path: '/profile'})
+            this.SET_EMAIL(this.email)
+
+          } else {
+            this.reset()
+            this.resetValidation() // TODO: Should be modal that says: EMAIL or Password WRONG
+          }
         }
       },
       reset() {

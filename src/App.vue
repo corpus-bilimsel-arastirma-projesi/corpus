@@ -1,12 +1,13 @@
 <template>
   <v-app>
-    <Toolbar />
+    <Toolbar/>
     <router-view/>
   </v-app>
 </template>
 
 <script>
   import Toolbar from './components/Toolbar'
+  import {initSession} from "./session-manager"
 
   export default {
     components: {
@@ -14,9 +15,11 @@
     },
     name: 'App',
     data() {
-      return {
-      }
-    }
+      return {}
+    },
+    mounted() {
+      initSession()
+    },
   }
 </script>
 

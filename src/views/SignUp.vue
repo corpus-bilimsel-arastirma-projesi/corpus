@@ -5,13 +5,6 @@
         v-model="valid"
         lazy-validation
     >
-      <v-text-field
-          v-model="name"
-          :counter="10"
-          :rules="nameRules"
-          label="Name"
-          required
-      ></v-text-field>
 
       <v-text-field
           v-model="email"
@@ -23,6 +16,7 @@
       <v-text-field
           v-model="password"
           :counter="20"
+          type="password"
           :rules="passwordRules"
           label="Password"
           required
@@ -64,17 +58,13 @@
 </template>
 
 <script>
-
+  import {mapActions} from 'vuex'
 
   export default {
     data: () => ({
       valid: true,
       name: '',
       password: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
-      ],
       passwordRules: [
         v => !!v || 'Password is required',
         v => (v && v.length >= 6) || 'Password must be greater than 6 characters'
@@ -86,11 +76,28 @@
       ],
       checkbox: false
     }),
-
     methods: {
-      validate() {
-        if (this.$refs.form.validate()) {
+      ...mapActions({
+        SIGN_UP: 'SIGN_UP',
+        SET_EMAIL: 'SET_EMAIL'
+      }),
+      async validate() {
+        if (this.$refs.form.validate()) { // this.$refs.form.validate() && (this.snackbar = true)
           this.snackbar = true
+
+          let status = await this.SIGN_UP({
+            username: this.email,
+            password: this.password
+          })
+
+          if(status === 200) {
+            this.$router.push({path: '/profile'})
+            this.SET_EMAIL(this.email)
+          } else {
+            this.reset()
+            this.resetValidation() // TODO: Should be modal that says: EMAIL or Password WRONG
+          }
+
         }
       },
       reset() {

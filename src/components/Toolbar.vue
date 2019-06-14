@@ -3,10 +3,14 @@
     <v-toolbar-title>Corpus Operations</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat v-on:click="goToHome">Home</v-btn>
-      <v-btn flat v-on:click="goToOperations">Operations</v-btn>
 
-      <v-menu offset-y>
+      <v-btn flat to="/">Home</v-btn>
+
+      <v-btn v-if="$store.getters.JWT_ACCESS" flat to="/operations">Operations</v-btn>
+
+      <v-btn v-if="$store.getters.JWT_ACCESS" flat to="/profile">Profile</v-btn>
+
+      <v-menu v-else offset-y>
         <template v-slot:activator="{ on }">
           <v-btn
               flat
@@ -19,7 +23,7 @@
           <v-list-tile
               v-for="(item, index) in items"
               :key="index"
-              @click="routeToGiven(item.title)"
+              :to="item.link"
           >
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile>
@@ -32,9 +36,9 @@
       <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
       <v-list>
         <v-list-tile
-            v-for="(item, index) in mobileItems"
+            v-for="(item, index) in mobileItems($store.getters.JWT_ACCESS)"
             :key="index"
-            @click="routeToGiven(item.title)">
+            :to="item.link">
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
@@ -46,36 +50,25 @@
 </template>
 
 <script>
+
   export default {
     data: () => ({
       items: [
-        {title: 'Sign Up'},
-        {title: 'Sign In'}
+        {title: 'Sign Up', link: '/sign-up'},
+        {title: 'Sign In', link: '/sign-in'}
       ],
-      mobileItems: [
-        {title: 'Home'},
-        {title: 'Operations'},
-        {title: 'Sign Up'},
-        {title: 'Sign In'}
-      ]
     }),
     methods: {
-      goToHome() {
-        this.$router.push({path: '/'})
-      },
-      goToOperations() {
-        this.$router.push({path: '/operations'})
-      },
-      routeToGiven(title) {
-        if (title === 'Sign Up') {
-          this.$router.push({path: 'sign-up'})
-        } else if (title === 'Sign In') {
-          this.$router.push({path: 'sign-in'})
-        } else if (title === 'Home') {
-          this.$router.push({path: '/'})
-        } else if (title === 'Operations') {
-          this.$router.push({path: 'operations'})
-        }
+      mobileItems(hasToken) {
+        return hasToken !== null ? [
+          {title: 'Home', link: '/'},
+          {title: 'Operations', link: '/operations'},
+          {title: 'Profile', link: '/profile'}
+        ] : [
+          {title: 'Home', link: '/'},
+          {title: 'Sign Up', link: '/sign-up'},
+          {title: 'Sign In', link: '/sign-in'}
+        ]
       }
     }
   }

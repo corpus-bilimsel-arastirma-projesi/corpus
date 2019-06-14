@@ -1,33 +1,6 @@
-# Django Vue Template ✌️ 🐍
+# BAP Project
 
-![Vue Logo](/src/assets/logo-vue.png "Vue Logo")
-![Django Logo](/src/assets/logo-django.png "Django Logo")
-
-This template is a minimal example for an application using Vue and Django.
-
-It's setup to have a clear separation: use Vue, Yarn, and Webpack to handle all frontend logic and assets bundling,
-and use Django with Django REST framework to manage a Data Models, Web API, and serve static files.
-
-While it's possible to add endpoints to serve django-rendered html responses, the intention is to use Django primarily for the backend, and have view rendering and routing and handled by Vue + Vue Router as a Single Page Application (SPA).
-
-Out of the box, Django will serve the application entry point (`index.html` + bundled assets) at `/` ,
-data at `/api/`, and static files at `/static/`. Django admin panel is also available at `/admin/` and can be extended as needed.
-
-The application templates from Vue CLI `create` and Django `createproject` are kept as close as possible to their
-original state, except where a different configuration is needed for better integration of the two frameworks.
-
-#### Alternatives
-
-If this setup is not what you are looking for, you might want look at other similar projects:
-
-* [ariera/django-vue-template](https://github.com/ariera/django-vue-template)
-* [vchaptsev/cookiecutter-django-vue](https://github.com/vchaptsev/cookiecutter-django-vue)
-
-Prefer Flask? Checkout my [gtalarico/flask-vuejs-template](https://github.com/gtalarico/flask-vuejs-template)
-
-### Demo
-
-[Live Demo](https://django-vue-template-demo.herokuapp.com/)
+It is research project for natural language processing that aims easy understanding of given corpus.
 
 ### Includes
 
@@ -153,7 +126,7 @@ The [`Procfile`](/Procfile) will run Django migrations and then launch Django'S 
 
 ##### Heroku One Click Deploy
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/gtalarico/django-vue-template)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/corpus-bilimsel-arastirma-projesi/corpus)
 
 ## Static Assets
 

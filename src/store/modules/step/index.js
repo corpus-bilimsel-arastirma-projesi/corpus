@@ -9,7 +9,8 @@ const state = {
   WORD_CLOUD: '',
   READY: false,
   UUID: '',
-  BUTTON_NAME: 'Cancel'
+  BUTTON_NAME: 'Cancel',
+  USER_FILES: []
 };
 
 export default {
