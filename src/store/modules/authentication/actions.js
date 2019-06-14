@@ -31,7 +31,7 @@ const REFRESH_TOKEN = (state) => {
   }
   authenticationService.postRefreshToken(payload)
     .then(res => {
-      console.log(`We will update token with using refreshJWT endpoint as ${res.refresh}`) // TODO: Decide which one is it access or refresh?
+      console.log(`We will update token with using refreshJWT endpoint as ${res.access}`)
       let payload = [res.access, state.getters.JWT_REFRESH]
       state.commit('UPDATE_TOKEN', payload)
     })

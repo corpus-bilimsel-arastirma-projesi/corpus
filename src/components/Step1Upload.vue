@@ -101,7 +101,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" flat @click="dialog = false">Back</v-btn>
-            <v-btn color="green darken-1" flat @click="dialog = false">Continue</v-btn> <!-- TODO: need endpoint -->
+            <v-btn color="green darken-1" flat @click="dialog = false">Continue</v-btn> <!-- TODO: /cleaning endpoint -->
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -118,7 +118,6 @@
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" flat @click="deleteDialog = false">Back</v-btn>
             <v-btn color="green darken-1" flat @click="deleteGivenFile">Continue</v-btn>
-            <!-- TODO: need endpoint -->
           </v-card-actions>
         </v-card>
       </v-dialog>
