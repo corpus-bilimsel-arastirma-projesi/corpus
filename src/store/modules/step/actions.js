@@ -44,6 +44,7 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
   let USER_FILES = []
 
   JSON.parse(res).data.forEach(x => USER_FILES.push({
+    id: x.id,
     icon: 'assignment',
     iconClass: 'blue white--text',
     title: x.filename,
@@ -51,6 +52,12 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
   }))
 
   context.commit("SET_USER_FILES", USER_FILES)
+}
+
+const DELETE_FILE_GIVEN_USER = (context, payload) => {
+  return stepService.deleteGivenFileName({
+    id: payload
+  })
 }
 
 const SET_USER_FILES = (context, payload) => {
@@ -100,5 +107,6 @@ export default {
   SET_WORD_CLOUD,
   SET_READY,
   GET_FILE_NAMES_GIVEN_USER,
-  SET_USER_FILES
+  SET_USER_FILES,
+  DELETE_FILE_GIVEN_USER
 };

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <div>
       <!--<vue-dropzone-->
       <!--ref="dropzone"-->
@@ -26,6 +25,28 @@
     </div>
 
     <!--<v-btn style="margin-top: 50px;" @click="removeAllFiles">Remove All Files</v-btn>-->
+
+    <transition name="fade">
+      <v-alert
+          v-if="isError"
+          :value="isError"
+          type="error"
+          dismissible
+      >
+        There has been an error, when deleting given file.
+      </v-alert>
+    </transition>
+
+    <transition name="fade">
+      <v-alert
+          v-if="isSuccess"
+          :value="isSuccess"
+          type="success"
+          dismissible
+      >
+        You have successfully removed given file.
+      </v-alert>
+    </transition>
 
     <v-layout row>
       <v-flex xs12 my-3>
@@ -60,7 +81,7 @@
               </v-list-tile-content>
 
               <v-list-tile-action>
-                <v-btn v-on:click.stop.prevent="openDeleteDialog(item.title)" icon ripple>
+                <v-btn v-on:click.stop.prevent="openDeleteDialog(item.id, item.title)" icon ripple>
                   <v-icon color="grey lighten-1">delete</v-icon>
                 </v-btn>
               </v-list-tile-action>
@@ -96,7 +117,8 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" flat @click="deleteDialog = false">Back</v-btn>
-            <v-btn color="green darken-1" flat @click="deleteGivenFile(selectedFileName)">Continue</v-btn> <!-- TODO: need endpoint -->
+            <v-btn color="green darken-1" flat @click="deleteGivenFile(selectedFileId)">Continue</v-btn>
+            <!-- TODO: need endpoint -->
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -125,7 +147,10 @@
       },
       dialog: false,
       deleteDialog: false,
-      selectedFileName: null
+      selectedFileName: null,
+      selectedFileId: null,
+      isError: false,
+      isSuccess: false
     }),
     components: {
       vueDropzone
@@ -191,15 +216,32 @@
         this.dialog = true
         this.selectedFileName = title
       },
-      openDeleteDialog(title) {
+      openDeleteDialog(id, title) {
         this.deleteDialog = true
         this.selectedFileName = title
+        this.selectedFileId = id
       },
-      deleteGivenFile(title) {
-        let temp = this.$store.getters.USER_FILES
-        temp = temp.filter(x => x.title !== title)
-        this.SET_USER_FILES(temp) // TODO: Need endpoint for backend
-        this.deleteDialog = false
+      async deleteGivenFile(id) {
+        let res = await this.$store.dispatch('DELETE_FILE_GIVEN_USER', id)
+
+        console.log(res)
+
+        if (res.success === true) {
+          let temp = this.$store.getters.USER_FILES
+          temp = temp.filter(x => x.title !== title)
+          this.SET_USER_FILES(temp)
+          this.deleteDialog = false
+          this.isSuccess = true
+          setTimeout(() => {
+          this.isSuccess = false
+        }, 5000)
+        } else {
+          this.deleteDialog = false
+          this.isError = true
+          setTimeout(() => {
+          this.isError = false
+        }, 5000)
+        }
       }
     }
   };
