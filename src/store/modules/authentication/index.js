@@ -6,6 +6,7 @@ const state = {
   EMAIL: '',
   JWT_ACCESS: localStorage.getItem('a'),
   JWT_REFRESH: localStorage.getItem('r'),
+  TOKENS_EXPIRY: parseInt(localStorage.getItem("tokensExpiry")),
   ENDPOINTS: {
     OBTAIN_JWT: 'token/',
     REFRESH_JWT: 'token/refresh/'
