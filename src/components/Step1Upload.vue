@@ -28,10 +28,9 @@
     <!--<v-btn style="margin-top: 50px;" @click="removeAllFiles">Remove All Files</v-btn>-->
 
     <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 my-3>
         <v-card>
           <v-toolbar color="light-blue" dark>
-            <v-toolbar-side-icon></v-toolbar-side-icon>
 
             <v-toolbar-title>My files</v-toolbar-title>
 
