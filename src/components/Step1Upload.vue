@@ -1,4 +1,4 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
   <div id="app">
 
     <div>
@@ -41,9 +41,6 @@
               <v-icon>search</v-icon>
             </v-btn>
 
-            <v-btn icon>
-              <v-icon>view_module</v-icon>
-            </v-btn>
           </v-toolbar>
 
           <v-list two-line subheader>
@@ -63,8 +60,8 @@
                 <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
               </v-list-tile-content>
 
-              <v-list-tile-action @click="deleteGivenFile(item.title)"> <!-- TODO: Does not work -->
-                <v-btn icon ripple>
+              <v-list-tile-action>
+                <v-btn v-on:click.stop.prevent="openDeleteDialog(item.title)" icon ripple>
                   <v-icon color="grey lighten-1">delete</v-icon>
                 </v-btn>
               </v-list-tile-action>
@@ -80,7 +77,7 @@
       <v-dialog v-model="dialog" persistent max-width="500">
         <v-card>
           <v-card-title class="headline">Do you want to continue with given file?</v-card-title>
-          <v-card-text>{{ selectedFileName }} is going to be deleted.</v-card-text>
+          <v-card-text>{{ selectedFileName }} is going to be used.</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" flat @click="dialog = false">Back</v-btn>
@@ -91,6 +88,20 @@
     </v-layout>
 
     <!-- Delete a file -->
+
+    <v-layout row justify-center>
+      <v-dialog v-model="deleteDialog" persistent max-width="500">
+        <v-card>
+          <v-card-title class="headline">Do you want to delete given file?</v-card-title>
+          <v-card-text>{{ selectedFileName }} is going to be deleted.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="deleteDialog = false">Back</v-btn>
+            <v-btn color="green darken-1" flat @click="deleteGivenFile(selectedFileName)">Continue</v-btn> <!-- TODO: need endpoint -->
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
 
   </div>
 </template>
@@ -111,12 +122,10 @@
         maxFilesize: 5, // MB
         maxFiles: 4,
         chunking: false,
-        addRemoveLinks: true,
-        // init: function() {
-        //   this.on("addedfile", function(file) { this.sendFileTubi(file); });
-        // }
+        addRemoveLinks: true
       },
       dialog: false,
+      deleteDialog: false,
       selectedFileName: null
     }),
     components: {
@@ -132,7 +141,8 @@
         SET_WORD_CLOUD: "SET_WORD_CLOUD",
         SET_JSON_TABLE: "SET_JSON_TABLE",
         SET_JSON_FILE: "SET_JSON_FILE",
-        SET_UUID: "SET_UUID"
+        SET_UUID: "SET_UUID",
+        SET_USER_FILES: "SET_USER_FILES"
       }),
       removeAllFiles() {
         this.$refs.dropzone.removeAllFiles();
@@ -182,10 +192,15 @@
         this.dialog = true
         this.selectedFileName = title
       },
+      openDeleteDialog(title) {
+        this.deleteDialog = true
+        this.selectedFileName = title
+      },
       deleteGivenFile(title) {
         let temp = this.$store.getters.USER_FILES
-        temp.filter(x => x.title === title)
-        this.$store.dispatch('SET_USER_FILES', temp).then() // TODO: Does not work properly, need endpoint for backend
+        temp = temp.filter(x => x.title !== title)
+        this.SET_USER_FILES(temp) // TODO: Need endpoint for backend
+        this.deleteDialog = false
       }
     }
   };
