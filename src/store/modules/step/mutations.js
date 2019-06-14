@@ -43,6 +43,10 @@ const SET_BUTTON_NAME = (state, payload) => {
   state.BUTTON_NAME = payload
 }
 
+const SET_USER_FILES = (state, payload) => {
+  state.USER_FILES = payload
+}
+
 export default {
   SET_STEP_NUMBER,
   SET_DEFAULT_STATE,
@@ -52,5 +56,6 @@ export default {
   POP_WORD_CLOUD,
   SET_READY,
   SET_UUID,
-  SET_BUTTON_NAME
+  SET_BUTTON_NAME,
+  SET_USER_FILES
 };

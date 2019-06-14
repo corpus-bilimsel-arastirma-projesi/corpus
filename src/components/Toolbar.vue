@@ -6,7 +6,7 @@
 
       <v-btn flat to="/">Home</v-btn>
 
-      <v-btn flat to="/operations">Operations</v-btn>
+      <v-btn v-if="$store.getters.JWT_ACCESS" flat to="/operations">Operations</v-btn>
 
       <v-btn v-if="$store.getters.JWT_ACCESS" flat to="/profile">Profile</v-btn>
 
@@ -36,7 +36,7 @@
       <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
       <v-list>
         <v-list-tile
-            v-for="(item, index) in mobileItems"
+            v-for="(item, index) in mobileItems($store.getters.JWT_ACCESS)"
             :key="index"
             :to="item.link">
           <v-list-tile-content>
@@ -57,14 +57,20 @@
         {title: 'Sign Up', link: '/sign-up'},
         {title: 'Sign In', link: '/sign-in'}
       ],
-      mobileItems: [
-        {title: 'Home', link: '/'},
-        {title: 'Operations', link: '/operations'},
-        {title: 'Sign Up', link: '/sign-up'},
-        {title: 'Sign In', link: '/sign-in'},
-        {title: 'Profile', link: '/profile'}
-      ]
     }),
+    methods: {
+      mobileItems(hasToken) {
+        return hasToken !== null ? [
+          {title: 'Home', link: '/'},
+          {title: 'Operations', link: '/operations'},
+          {title: 'Profile', link: '/profile'}
+        ] : [
+          {title: 'Home', link: '/'},
+          {title: 'Sign Up', link: '/sign-up'},
+          {title: 'Sign In', link: '/sign-in'}
+        ]
+      }
+    }
   }
 </script>
 

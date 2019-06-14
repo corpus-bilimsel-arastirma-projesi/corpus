@@ -75,19 +75,27 @@
     }),
     methods: {
       ...mapActions({
-        OBTAIN_TOKEN: 'OBTAIN_TOKEN'
+        OBTAIN_TOKEN: 'OBTAIN_TOKEN',
+        SET_EMAIL: 'SET_EMAIL'
       }),
-      validate() {
+      async validate() {
         if (this.$refs.form.validate()) {
           this.snackbar = true
 
-          this.OBTAIN_TOKEN({
+          let status = await this.OBTAIN_TOKEN({
             username: this.email,
             password: this.password
           })
 
-          this.$router.replace({path: '/profile'})
+          if(status === 200) {
 
+            this.$router.push({path: '/profile'})
+            this.SET_EMAIL(this.email)
+
+          } else {
+            this.reset()
+            this.resetValidation() // TODO: Should be modal that says: EMAIL or Password WRONG
+          }
         }
       },
       reset() {

@@ -12,7 +12,12 @@ const REMOVE_TOKEN = (state) => {
   state.JWT_REFRESH = null
 }
 
+const SET_EMAIL = (state, payload) => {
+  state.EMAIL = payload
+}
+
 export default {
   UPDATE_TOKEN,
-  REMOVE_TOKEN
+  REMOVE_TOKEN,
+  SET_EMAIL
 }

@@ -1,15 +1,28 @@
-import authenticationService from '@/services/authenticationService' // TODO: Will be used, when it is completed
+import authenticationService from '@/services/authenticationService'
 import jwt_decode from 'jwt-decode'
 
+const SIGN_UP = (state, payload) => {
+  return authenticationService.postSignup(payload).then(res => {
+    let payload = [res.token.access, res.token.refresh]
+    state.commit('UPDATE_TOKEN', payload)
+    return res.success === true && 200
+  }).catch(err => {
+    console.log(err)
+    return 404
+  })
+}
+
 const OBTAIN_TOKEN = (state, payload) => {
-  authenticationService.postObtainToken(payload)
+  return authenticationService.postObtainToken(payload)
     .then(res => {
       console.log(`We will update token with using obtainJWT endpoint as ${res.access}`)
       let payload = [res.access, res.refresh]
-      state.commit('UPDATE_TOKEN', payload); // response.data.token -> access or refresh
+      state.commit('UPDATE_TOKEN', payload)
+      return 200
     })
     .catch(err => {
       console.log(err)
+      return 404
     })
 }
 
@@ -46,8 +59,14 @@ const INSPECT_TOKEN = (state) => { // TODO: This method will be used to check to
   }
 }
 
+const SET_EMAIL = (context, payload) => {
+  context.commit("SET_EMAIL", payload);
+}
+
 export default {
   OBTAIN_TOKEN,
   REFRESH_TOKEN,
-  INSPECT_TOKEN
+  INSPECT_TOKEN,
+  SET_EMAIL,
+  SIGN_UP
 };

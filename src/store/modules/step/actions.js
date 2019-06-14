@@ -34,7 +34,28 @@ const CLEAN_PARAMETERS = async (context, payload) => {
   context.commit("SET_JSON_TABLE", table)
   context.commit("SET_JSON_FILE", tempPayload)
   context.commit("SET_READY", true)
-};
+}
+
+const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
+  let res = await stepService.postFileNamesGivenUser({
+    user: payload
+  })
+
+  let USER_FILES = []
+
+  JSON.parse(res).data.forEach(x => USER_FILES.push({
+    icon: 'assignment',
+    iconClass: 'blue white--text',
+    title: x.filename,
+    subtitle: Date.now()
+  }))
+
+  context.commit("SET_USER_FILES", USER_FILES)
+}
+
+const SET_USER_FILES = (context, payload) => {
+  context.commit("SET_USER_FILES", payload)
+}
 
 const SET_HANDLE = (context, payload) => {
   context.commit("SET_HANDLE", payload);
@@ -77,5 +98,7 @@ export default {
   SET_JSON_FILE,
   SET_JSON_TABLE,
   SET_WORD_CLOUD,
-  SET_READY
+  SET_READY,
+  GET_FILE_NAMES_GIVEN_USER,
+  SET_USER_FILES
 };

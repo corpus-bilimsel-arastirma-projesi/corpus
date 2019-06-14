@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div id="app">
 
     <div>
@@ -27,6 +27,71 @@
 
     <!--<v-btn style="margin-top: 50px;" @click="removeAllFiles">Remove All Files</v-btn>-->
 
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card>
+          <v-toolbar color="light-blue" dark>
+            <v-toolbar-side-icon></v-toolbar-side-icon>
+
+            <v-toolbar-title>My files</v-toolbar-title>
+
+            <v-spacer></v-spacer>
+
+            <v-btn icon>
+              <v-icon>search</v-icon>
+            </v-btn>
+
+            <v-btn icon>
+              <v-icon>view_module</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <v-list two-line subheader>
+
+            <v-list-tile
+                v-for="item in USER_FILES"
+                :key="item.title"
+                avatar
+                @click="selectFile(item.title)"
+            >
+              <v-list-tile-avatar>
+                <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action @click="deleteGivenFile(item.title)"> <!-- TODO: Does not work -->
+                <v-btn icon ripple>
+                  <v-icon color="grey lighten-1">delete</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list>
+        </v-card>
+      </v-flex>
+    </v-layout>
+
+    <!-- Continue with a file -->
+
+    <v-layout row justify-center>
+      <v-dialog v-model="dialog" persistent max-width="500">
+        <v-card>
+          <v-card-title class="headline">Do you want to continue with given file?</v-card-title>
+          <v-card-text>{{ selectedFileName }} is going to be deleted.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="dialog = false">Back</v-btn>
+            <v-btn color="green darken-1" flat @click="dialog = false">Continue</v-btn> <!-- TODO: need endpoint -->
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+
+    <!-- Delete a file -->
+
   </div>
 </template>
 
@@ -34,15 +99,15 @@
   import vueDropzone from "vue2-dropzone";
   import 'vue2-dropzone/dist/vue2Dropzone.min.css'
   import {uuid} from 'vue-uuid';
-  import {mapMutations} from 'vuex'
+  import {mapMutations, mapGetters} from 'vuex'
   import api from '@/services/api'
-  import {store} from '../store/store';
+  import store from '../store/index'
 
   export default {
     data: () => ({
       dropOptions: {
         url: api.defaults.baseURL + "/upload/",
-        headers: {Authorization: `Bearer ${store.token}`},
+        headers: {Authorization: `Bearer ${store.getters.JWT_ACCESS}`},
         maxFilesize: 5, // MB
         maxFiles: 4,
         chunking: false,
@@ -50,11 +115,17 @@
         // init: function() {
         //   this.on("addedfile", function(file) { this.sendFileTubi(file); });
         // }
-      }
+      },
+      dialog: false,
+      selectedFileName: null
     }),
     components: {
       vueDropzone
     },
+    mounted: function () {
+      this.GET_USER_FILES()
+    },
+    computed: mapGetters(['USER_FILES']),
     methods: {
       ...mapMutations({
         SET_READY: 'SET_READY',
@@ -69,6 +140,7 @@
       afterComplete(file) {
         console.log(file);
         console.log(file.status);
+        this.GET_USER_FILES()
 
         let payload = []
         let table = []
@@ -102,6 +174,18 @@
         formData.append('remark', "Hello World")
         formData.append('uuid', uuid)
         formData.append('jwt', this.$store.getters.JWT_ACCESS)
+      },
+      GET_USER_FILES() {
+        this.$store.dispatch('GET_FILE_NAMES_GIVEN_USER', this.$store.getters.EMAIL).then()
+      },
+      selectFile(title) {
+        this.dialog = true
+        this.selectedFileName = title
+      },
+      deleteGivenFile(title) {
+        let temp = this.$store.getters.USER_FILES
+        temp.filter(x => x.title === title)
+        this.$store.dispatch('SET_USER_FILES', temp).then() // TODO: Does not work properly, need endpoint for backend
       }
     }
   };

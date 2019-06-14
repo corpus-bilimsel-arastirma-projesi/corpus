@@ -1,9 +1,7 @@
 import axios from 'axios'
-import {store} from '../store/store';
+import store from '../store/index'
 
-let JWT_ACCESS = localStorage.getItem('a')
-
-const http = axios.create({ // TODO: Will be implemented with JWT
+const http = axios.create({
   baseURL: '/api',
   headers: {
     'Content-Type': 'application/json'
@@ -12,7 +10,7 @@ const http = axios.create({ // TODO: Will be implemented with JWT
 
 http.interceptors.request.use (
   function (config) {
-    const token = store.token;
+    const token = store.getters.JWT_ACCESS || localStorage.getItem('a');
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config
   },

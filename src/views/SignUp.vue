@@ -58,7 +58,7 @@
 </template>
 
 <script>
-  import authenticationService from '@/services/authenticationService' // TODO: Will be used, when it is completed
+  import {mapActions} from 'vuex'
 
   export default {
     data: () => ({
@@ -77,17 +77,28 @@
       checkbox: false
     }),
     methods: {
-      validate() {
+      ...mapActions({
+        SIGN_UP: 'SIGN_UP',
+        SET_EMAIL: 'SET_EMAIL'
+      }),
+      async validate() {
         if (this.$refs.form.validate()) { // this.$refs.form.validate() && (this.snackbar = true)
           this.snackbar = true
-          var payload = {
+
+          let status = await this.SIGN_UP({
             username: this.email,
             password: this.password
+          })
+
+          if(status === 200) {
+            this.$router.push({path: '/profile'})
+            this.SET_EMAIL(this.email)
+          } else {
+            this.reset()
+            this.resetValidation() // TODO: Should be modal that says: EMAIL or Password WRONG
           }
-          authenticationService.postSignup(payload).then(x => console.log(x))
-          console.log('Inside IF')
+
         }
-        console.log('Outside IF')
       },
       reset() {
         this.$refs.form.reset()
