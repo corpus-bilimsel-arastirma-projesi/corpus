@@ -225,7 +225,7 @@
 
         if (res.success === true) {
           let temp = this.$store.getters.USER_FILES
-          temp = temp.filter(x => x.title !== this.selectedFileName)
+          temp = temp.filter(x => x.id !== this.selectedFileId)
           this.SET_USER_FILES(temp)
           this.deleteDialog = false
           this.isSuccess = true
