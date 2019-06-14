@@ -95,3 +95,12 @@ class GetFilesOfUser(APIView):
         dictionaries = [obj.as_dict() for obj in query_set]
         data = json.dumps({"data": dictionaries})
         return Response(data, status=status.HTTP_200_OK)
+
+    def delete(self, request, format=None):
+        try:
+            document = File.objects.get(id=request.data['id'])
+            document.delete()
+
+            return Response({'success': True})
+        except Exception:
+            return Response({'success': False})
