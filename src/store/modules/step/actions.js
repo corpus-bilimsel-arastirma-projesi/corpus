@@ -56,7 +56,9 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
 
 const DELETE_FILE_GIVEN_USER = (context, payload) => {
   return stepService.deleteGivenFileName({
-    id: payload
+    data: {
+      id: payload
+    }
   })
 }
 

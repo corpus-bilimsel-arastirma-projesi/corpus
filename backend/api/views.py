@@ -98,7 +98,7 @@ class GetFilesOfUser(APIView):
 
     def delete(self, request, format=None):
         try:
-            document = File.objects.get(id=request.data['id'])
+            document = File.objects.get(id=request.data['id'], user=request.user)
             document.delete()
 
             return Response({'success': True})

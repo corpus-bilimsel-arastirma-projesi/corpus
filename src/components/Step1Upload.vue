@@ -48,7 +48,7 @@
       </v-alert>
     </transition>
 
-    <v-layout row>
+    <v-layout row v-if="USER_FILES.length > 0">
       <v-flex xs12 my-3>
         <v-card>
           <v-toolbar color="light-blue" dark>
@@ -117,7 +117,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" flat @click="deleteDialog = false">Back</v-btn>
-            <v-btn color="green darken-1" flat @click="deleteGivenFile(selectedFileId)">Continue</v-btn>
+            <v-btn color="green darken-1" flat @click="deleteGivenFile">Continue</v-btn>
             <!-- TODO: need endpoint -->
           </v-card-actions>
         </v-card>
@@ -221,14 +221,12 @@
         this.selectedFileName = title
         this.selectedFileId = id
       },
-      async deleteGivenFile(id) {
-        let res = await this.$store.dispatch('DELETE_FILE_GIVEN_USER', id)
-
-        console.log(res)
+      async deleteGivenFile() {
+        let res = await this.$store.dispatch('DELETE_FILE_GIVEN_USER', this.selectedFileId)
 
         if (res.success === true) {
           let temp = this.$store.getters.USER_FILES
-          temp = temp.filter(x => x.title !== title)
+          temp = temp.filter(x => x.title !== this.selectedFileName)
           this.SET_USER_FILES(temp)
           this.deleteDialog = false
           this.isSuccess = true
