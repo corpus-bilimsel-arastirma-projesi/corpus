@@ -55,12 +55,6 @@
 
             <v-toolbar-title>My files</v-toolbar-title>
 
-            <v-spacer></v-spacer>
-
-            <v-btn icon>
-              <v-icon>search</v-icon>
-            </v-btn>
-
           </v-toolbar>
 
           <v-list two-line subheader>
@@ -69,7 +63,7 @@
                 v-for="item in USER_FILES"
                 :key="item.title"
                 avatar
-                @click="selectFile(item.title)"
+                @click="selectFile(item.title, item.uuid)"
             >
               <v-list-tile-avatar>
                 <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
@@ -100,8 +94,8 @@
           <v-card-text>{{ selectedFileName }} is going to be used.</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat @click="dialog = false">Back</v-btn>
-            <v-btn color="green darken-1" flat @click="dialog = false">Continue</v-btn> <!-- TODO: /cleaning endpoint -->
+            <v-btn color="green darken-1" flat @click="backCleanGivenFile">Back</v-btn>
+            <v-btn color="green darken-1" flat @click="cleanGivenFile" :loading="loading">Continue</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -139,17 +133,19 @@
       dropOptions: {
         url: api.defaults.baseURL + "/upload/",
         headers: {Authorization: `Bearer ${store.getters.JWT_ACCESS}`},
-        maxFilesize: 5, // MB
+        maxFilesize: 10, // MB
         maxFiles: 4,
         chunking: false,
         addRemoveLinks: true
       },
+      uuid: null,
       dialog: false,
-      deleteDialog: false,
-      selectedFileName: null,
-      selectedFileId: null,
       isError: false,
-      isSuccess: false
+      loading: false,
+      isSuccess: false,
+      deleteDialog: false,
+      selectedFileId: null,
+      selectedFileName: null
     }),
     components: {
       vueDropzone
@@ -174,32 +170,6 @@
         console.log(file);
         console.log(file.status);
         this.GET_USER_FILES()
-
-        let payload = []
-        let table = []
-        let wordCloud = []
-        let temp = 1
-        let array = JSON.parse("[" + file.xhr.response + "]");
-        array[0].forEach(x => {
-          payload.push({key: x[0], value: parseInt(x[1])})
-          table.push({number: temp, word: x[0], frequency: parseInt(x[1])})
-          wordCloud.push({
-            text: x[0],
-            weight: parseInt(x[1]),
-            rotation: 1,
-            rotationUnit: 'turn',
-            fontFamily: 'Anton',
-            fontStyle: 'italic', // normal|italic|oblique|initial|inherit
-            fontVariant: '', // normal|small-caps|initial|inherit
-            fontWeight: '', // normal|bold|bolder|lighter|number|initial|inherit
-            color: '#' + (Math.random().toString(16) + "000000").substring(2, 8)
-          })
-          temp = temp + 1
-        })
-        this.SET_WORD_CLOUD(wordCloud)
-        this.SET_JSON_TABLE(table)
-        this.SET_JSON_FILE(payload)
-        this.SET_READY(true)
       },
       sendingEvent(file, xhr, formData) {
         let uuid = this.$uuid.v1()
@@ -211,9 +181,10 @@
       GET_USER_FILES() {
         this.$store.dispatch('GET_FILE_NAMES_GIVEN_USER', this.$store.getters.EMAIL).then()
       },
-      selectFile(title) {
+      selectFile(title, uuid) {
         this.dialog = true
         this.selectedFileName = title
+        this.uuid = uuid
       },
       openDeleteDialog(id, title) {
         this.deleteDialog = true
@@ -239,6 +210,22 @@
           this.isError = false
         }, 5000)
         }
+      },
+      cleanGivenFile() {
+        this.loading = true;
+        let payload = []
+        let checkboxes = []
+        payload.push(this.uuid)
+        payload.push(checkboxes)
+        payload.push(10)
+        this.$store.dispatch("CLEAN_PARAMETERS", payload).then(() => {
+          this.dialog = false
+          this.loading = false
+        })
+      },
+      backCleanGivenFile() {
+        this.loading = false
+        this.dialog = false
       }
     }
   };

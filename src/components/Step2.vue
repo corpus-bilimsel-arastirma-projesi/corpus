@@ -96,7 +96,7 @@
         })
         payload.push(checkboxes)
         payload.push(this.howMany)
-        this.$store.dispatch("CLEAN_PARAMETERS", payload).then(() => this.loading = false) //TODO: We should get 200 or 404 status responses from action but it does not work
+        this.$store.dispatch("CLEAN_PARAMETERS", payload).then(() => this.loading = false)
       },
       enterPressed(e) {
         if (e.key === "Enter" && this.howMany) {

@@ -32,7 +32,8 @@
           <div class="py-3">
             <h2 :class="`headline font-weight-light mb-3 ${year.color}--text`">Lorem ipsum</h2>
             <div>
-              Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando
+              Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod
+              convenire principes at. Est et nobis iisque percipit, an vim zril disputando
               voluptatibus, vix an salutandi sententiae.
             </div>
           </div>
@@ -53,6 +54,7 @@
 
 <script>
   import D3Network from 'vue-d3-network'
+  import {initSession} from "../session-manager";
 
   export default {
     data: () => ({
@@ -114,16 +116,19 @@
         {sid: 15, tid: 1, _color: 'black'}
       ],
       options:
-          {
-            force: 3000,
-            nodeSize: 50,
-            nodeLabels: false,
-            linkWidth: 20
-          }
+        {
+          force: 3000,
+          nodeSize: 50,
+          nodeLabels: false,
+          linkWidth: 20
+        }
     }),
     components: {
       D3Network
-    }
+    },
+    mounted() {
+      initSession()
+    },
   }
 </script>
 

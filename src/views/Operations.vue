@@ -68,10 +68,10 @@
         <v-divider></v-divider>
 
         <!--<v-btn-->
-            <!--class="default"-->
-            <!--color="primary"-->
-            <!--@click="defaultState">-->
-          <!--DEFAULT-->
+        <!--class="default"-->
+        <!--color="primary"-->
+        <!--@click="defaultState">-->
+        <!--DEFAULT-->
         <!--</v-btn>-->
 
         <v-btn
@@ -95,6 +95,7 @@
   import UploadTabs from './UploadTabs'
 
   import {mapMutations, mapGetters} from 'vuex'
+  import {initSession} from "../session-manager"
 
   export default {
     components: {
@@ -114,6 +115,9 @@
         STEP_NUMBER: 'STEP_NUMBER',
         BUTTON_NAME: 'BUTTON_NAME',
       }),
+    },
+    mounted() {
+      initSession()
     },
     updated() {
       this.buttonName = this.BUTTON_NAME;

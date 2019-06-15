@@ -45,6 +45,7 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
 
   JSON.parse(res).data.forEach(x => USER_FILES.push({
     id: x.id,
+    uuid: x.uuid,
     icon: 'assignment',
     iconClass: 'blue white--text',
     title: x.filename,

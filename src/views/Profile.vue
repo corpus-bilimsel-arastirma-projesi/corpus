@@ -44,7 +44,8 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters, mapMutations} from "vuex";
+  import {mapGetters, mapMutations} from "vuex"
+  import {initSession} from "../session-manager"
 
   export default {
     data: () => ({
@@ -53,25 +54,16 @@
     computed: {
       ...mapGetters(['EMAIL', 'JWT_ACCESS'])
     },
+    mounted() {
+      initSession()
+    },
     methods: {
       ...mapMutations({
         REMOVE_TOKEN: 'REMOVE_TOKEN'
       }),
-      ...mapGetters({
-        JWT: 'JWT'
-      }),
-      ...mapActions({
-        REFRESH_TOKEN: 'REFRESH_TOKEN',
-        INSPECT_TOKEN: 'INSPECT_TOKEN'
-      }),
       logOut() {
         this.REMOVE_TOKEN()
-
-        // console.log(`Token is removed as you can see => ${JWT_ACCESS}`)
-
         this.$router.replace({path: '/sign-in'})
-
-        // this.INSPECT_TOKEN()
       }
     }
   }

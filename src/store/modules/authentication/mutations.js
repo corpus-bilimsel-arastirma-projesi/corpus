@@ -18,8 +18,10 @@ const UPDATE_TOKEN = (state, payload) => {
 const REMOVE_TOKEN = (state) => {
   localStorage.removeItem('a')
   localStorage.removeItem('r')
+  localStorage.removeItem('tokensExpiry')
   state.JWT_ACCESS = null
   state.JWT_REFRESH = null
+  state.TOKENS_EXPIRY = null
 }
 
 const SET_EMAIL = (state, payload) => {

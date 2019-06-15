@@ -28,9 +28,8 @@ class UploadFile(APIView):
         if file_serializer.is_valid():
 
             file_serializer.save()
-            data = clean_and_tokenize(request.data['file'])
 
-            return Response(data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
