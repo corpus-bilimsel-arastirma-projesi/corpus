@@ -29,7 +29,7 @@ class UploadFile(APIView):
 
             file_serializer.save()
 
-            return Response(status=status.HTTP_201_CREATED)
+            return Response({'success': True}, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
