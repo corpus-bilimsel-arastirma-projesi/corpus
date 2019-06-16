@@ -11,7 +11,7 @@ const state = {
   UUID: '',
   BUTTON_NAME: 'Cancel',
   USER_FILES: []
-};
+}
 
 export default {
   namespaced: false,
@@ -19,4 +19,4 @@ export default {
   actions,
   getters,
   mutations,
-};
+}

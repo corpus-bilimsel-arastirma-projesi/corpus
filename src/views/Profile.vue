@@ -44,7 +44,7 @@
 </template>
 
 <script>
-  import {mapGetters, mapMutations} from "vuex"
+  import {mapGetters, mapActions} from "vuex"
   import {initSession} from "../session-manager"
 
   export default {
@@ -58,7 +58,7 @@
       initSession()
     },
     methods: {
-      ...mapMutations({
+      ...mapActions({
         REMOVE_TOKEN: 'REMOVE_TOKEN'
       }),
       logOut() {

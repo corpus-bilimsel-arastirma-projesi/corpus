@@ -1,9 +1,9 @@
-import actions from './actions';
-import getters from './getters';
-import mutations from './mutations';
+import actions from './actions'
+import getters from './getters'
+import mutations from './mutations'
 
 const state = {
-};
+}
 
 export default {
   namespaced: false,
@@ -11,4 +11,4 @@ export default {
   actions,
   getters,
   mutations,
-};
+}

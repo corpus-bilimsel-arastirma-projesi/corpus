@@ -7,7 +7,7 @@ const SIGN_UP = (state, payload) => {
     return res.success === true && 200
   }).catch(err => {
     console.log(err)
-    return 404
+    return err
   })
 }
 
@@ -21,7 +21,7 @@ const OBTAIN_TOKEN = (state, payload) => {
     })
     .catch(err => {
       console.log(err)
-      return 404
+      return err
     })
 }
 
@@ -41,12 +41,19 @@ const REFRESH_TOKEN = (state) => {
 }
 
 const SET_EMAIL = (context, payload) => {
-  context.commit("SET_EMAIL", payload);
+  context.commit("SET_EMAIL", payload)
+}
+
+const REMOVE_TOKEN = (context, payload) => {
+  context.commit("REMOVE_TOKEN", payload)
+  context.commit("DEFAULT_QUERY_STATES", payload)
+  context.commit("DEFAULT_STEP_STATES", payload)
 }
 
 export default {
-  OBTAIN_TOKEN,
-  REFRESH_TOKEN,
+  SIGN_UP,
   SET_EMAIL,
-  SIGN_UP
+  OBTAIN_TOKEN,
+  REMOVE_TOKEN,
+  REFRESH_TOKEN
 };

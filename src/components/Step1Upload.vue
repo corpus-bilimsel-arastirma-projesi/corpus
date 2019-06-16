@@ -185,6 +185,7 @@
         this.dialog = true
         this.selectedFileName = title
         this.uuid = uuid
+        this.SET_UUID(uuid)
       },
       openDeleteDialog(id, title) {
         this.deleteDialog = true

@@ -2,16 +2,6 @@ const SET_STEP_NUMBER = (state, payload) => {
   state.STEP_NUMBER = parseInt(payload).toString()
 }
 
-const SET_DEFAULT_STATE = (state) => {
-  state.STEP_NUMBER = 1
-  state.JSON_FILE = ''
-  state.JSON_TABLE = ''
-  state.WORD_CLOUD = ''
-  state.READY = false
-  state.UUID = ''
-  state.BUTTON_NAME = 'Cancel'
-}
-
 const SET_JSON_FILE = (state, payload) => {
   state.JSON_FILE = payload
 }
@@ -47,15 +37,26 @@ const SET_USER_FILES = (state, payload) => {
   state.USER_FILES = payload
 }
 
+const DEFAULT_STEP_STATES = (state) => {
+  state.STEP_NUMBER = '1'
+  state.JSON_FILE = ''
+  state.JSON_TABLE = ''
+  state.WORD_CLOUD = ''
+  state.READY = false
+  state.UUID = ''
+  state.BUTTON_NAME = 'Cancel'
+  state.USER_FILES = []
+}
+
 export default {
-  SET_STEP_NUMBER,
-  SET_DEFAULT_STATE,
+  SET_UUID,
+  SET_READY,
   SET_JSON_FILE,
   SET_JSON_TABLE,
   SET_WORD_CLOUD,
   POP_WORD_CLOUD,
-  SET_READY,
-  SET_UUID,
+  SET_USER_FILES,
+  SET_STEP_NUMBER,
   SET_BUTTON_NAME,
-  SET_USER_FILES
+  DEFAULT_STEP_STATES
 };

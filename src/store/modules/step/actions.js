@@ -71,16 +71,8 @@ const SET_HANDLE = (context, payload) => {
   context.commit("SET_HANDLE", payload);
 }
 
-const SET_EMPTY_STORE = (context, payload) => {
-  context.commit("SET_EMPTY", payload);
-}
-
 const SET_STEP_NUMBER = (context, payload) => {
   context.commit("SET_STEP_NUMBER", payload)
-}
-
-const SET_DEFAULT_STATE = (context) => {
-  context.commit("SET_DEFAULT_STATE")
 }
 
 const SET_JSON_FILE = async (context, payload) => {
@@ -102,9 +94,7 @@ const SET_READY = async (context, payload) => {
 export default {
   CLEAN_PARAMETERS,
   SET_HANDLE,
-  SET_EMPTY_STORE,
   SET_STEP_NUMBER,
-  SET_DEFAULT_STATE,
   SET_JSON_FILE,
   SET_JSON_TABLE,
   SET_WORD_CLOUD,

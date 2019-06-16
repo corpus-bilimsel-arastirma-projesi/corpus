@@ -67,13 +67,6 @@
 
         <v-divider></v-divider>
 
-        <!--<v-btn-->
-        <!--class="default"-->
-        <!--color="primary"-->
-        <!--@click="defaultState">-->
-        <!--DEFAULT-->
-        <!--</v-btn>-->
-
         <v-btn
             class="continue"
             color="primary"
@@ -129,8 +122,7 @@
       ...mapMutations({
         SET_READY: 'SET_READY',
         SET_STEP_NUMBER: 'SET_STEP_NUMBER',
-        SET_BUTTON_NAME: 'SET_BUTTON_NAME',
-        SET_DEFAULT_STATE: 'SET_DEFAULT_STATE'
+        SET_BUTTON_NAME: 'SET_BUTTON_NAME'
       }),
       increaseStep() {
         let step = parseInt(this.STEP_NUMBER)
@@ -156,16 +148,12 @@
         if (step === 2) {
           this.SET_BUTTON_NAME('Cancel')
           this.buttonName = 'Cancel'
-          // this.SET_DEFAULT_STATE()
         }
         if (step === 4) {
           this.SET_READY(true)
           window.location.reload()
         }
-      },
-      defaultState() {
-        this.SET_DEFAULT_STATE()
-      },
+      }
     }
   }
 </script>

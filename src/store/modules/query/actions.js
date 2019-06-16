@@ -8,12 +8,8 @@ const QUERY_DATABASE = async (context, payload) => {
     tempArray.push(x.filename)
   })
   return tempArray
-};
-
-const SET_READY = async (context, payload) => {
-  context.commit("SET_READY", payload)
 }
 
 export default {
   QUERY_DATABASE
-};
+}
