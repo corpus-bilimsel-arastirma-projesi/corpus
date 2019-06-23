@@ -1,3 +1,4 @@
+
 from django.urls import path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -20,4 +21,7 @@ urlpatterns = [
     path('upload/', UploadFile.as_view(), name='file_upload'),
     path('cleaning/', CleanWithParameters.as_view(), name='cleaning'),
     path('query/', Query.as_view(), name='query'),
+
+    # Test
+    path('stats/', Stats.as_view())
 ]

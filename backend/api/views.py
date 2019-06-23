@@ -28,8 +28,9 @@ class UploadFile(APIView):
         if file_serializer.is_valid():
 
             file_serializer.save()
+            data = clean_and_tokenize(request.data['file'])
 
-            return Response({'success': True}, status=status.HTTP_201_CREATED)
+            return Response(data, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -38,9 +39,6 @@ class CleanWithParameters(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
-        """
-        Return a list of all users.
-        """
         document = File.objects.get(uuid=request.data['uuid'])
         parameters = request.data['checkboxes']
         most_common = int(request.data['mostCommon'])
@@ -54,9 +52,6 @@ class Query(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
-        """
-        Return a list of all users.
-        """
         print(request.user.username)
 
         query = request.data['query']
@@ -103,3 +98,21 @@ class GetFilesOfUser(APIView):
             return Response({'success': True})
         except Exception:
             return Response({'success': False})
+
+
+class Stats(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        document = File.objects.get(uuid=request.data['uuid'])
+
+        data = json.load(document.file)
+
+        d = {}
+        for item in data['source']:
+            if data['source'][item] in d:
+                d[data['source'][item]] = d.get(data['source'][item]) + 1
+            else:
+                d[data['source'][item]] = 1
+
+        return Response(d, status=status.HTTP_200_OK)
