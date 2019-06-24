@@ -228,6 +228,7 @@
         this.messageProgress = 'Processing...'
         this.previewProgress = true
         this.$store.dispatch("CLEAN_PARAMETERS", payload).then(() => {
+          this.$store.commit("SET_STEP_NUMBER", parseInt(this.$store.getters.STEP_NUMBER) + 1)
           this.previewDialog = false
           this.previewProgress = false
         }).catch(() => {
