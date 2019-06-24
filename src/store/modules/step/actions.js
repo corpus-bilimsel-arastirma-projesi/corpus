@@ -33,7 +33,7 @@ const CLEAN_PARAMETERS = async (context, payload) => {
   context.commit("SET_WORD_CLOUD", wordCloud)
   context.commit("SET_JSON_TABLE", table)
   context.commit("SET_JSON_FILE", tempPayload)
-  context.commit("SET_READY", true)
+  context.commit("SET_READY", true) // TODO: Will be changed!
 }
 
 const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {

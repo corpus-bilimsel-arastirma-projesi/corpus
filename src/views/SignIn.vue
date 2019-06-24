@@ -12,6 +12,7 @@
             :rules="emailRules"
             label="E-mail"
             required
+            v-on:keyup="enterPressed"
         ></v-text-field>
 
         <v-text-field
@@ -21,6 +22,7 @@
             :rules="passwordRules"
             label="Password"
             required
+            v-on:keyup="enterPressed"
         ></v-text-field>
 
         <v-checkbox
@@ -118,6 +120,7 @@
         SET_EMAIL: 'SET_EMAIL'
       }),
       async validate() {
+        console.log('pressed')
         if (this.$refs.form.validate()) {
           this.snackbar = true
 
@@ -144,7 +147,10 @@
       },
       resetValidation() {
         this.$refs.form.resetValidation()
-      }
+      },
+      enterPressed(e) {
+        e.key === "Enter" && this.validate()
+      },
     }
   }
 </script>

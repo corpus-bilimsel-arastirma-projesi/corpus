@@ -1,0 +1,7 @@
+const PREVIEW_WORD_CLOUD = state => state.PREVIEW_WORD_CLOUD
+const PREVIEW_VERTICAL_BAR = state => state.PREVIEW_VERTICAL_BAR
+
+export default {
+  PREVIEW_WORD_CLOUD,
+  PREVIEW_VERTICAL_BAR
+}

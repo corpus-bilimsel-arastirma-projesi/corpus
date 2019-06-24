@@ -48,58 +48,61 @@
       </v-alert>
     </transition>
 
-    <v-layout row v-if="USER_FILES.length > 0">
-      <v-flex xs12 my-3>
-        <v-card>
-          <v-toolbar color="light-blue" dark>
+    <div v-if="USER_FILES.length > 0">
+      <br>
+      <h1>You can choose file to continue cleaning steps.</h1>
 
-            <v-toolbar-title>My files</v-toolbar-title>
+      <v-layout row>
+        <v-flex xs12 my-3>
+          <v-card>
+            <v-toolbar color="light-blue" dark>
 
-          </v-toolbar>
+              <v-toolbar-title>My files</v-toolbar-title>
 
-          <v-list two-line subheader>
+            </v-toolbar>
 
-            <v-list-tile
-                v-for="item in USER_FILES"
-                :key="item.title"
-                avatar
-                @click="selectFile(item.title, item.uuid)"
-            >
-              <v-list-tile-avatar>
-                <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
-              </v-list-tile-avatar>
+            <v-list two-line subheader>
 
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
-              </v-list-tile-content>
+              <v-list-tile
+                  v-for="item in USER_FILES"
+                  :key="item.title"
+                  avatar
+                  @click="selectFile(item.title, item.uuid)"
+              >
+                <v-list-tile-avatar>
+                  <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
+                </v-list-tile-avatar>
 
-              <v-list-tile-action>
-                <v-btn v-on:click.stop.prevent="openDeleteDialog(item.id, item.title)" icon ripple>
-                  <v-icon color="grey lighten-1">delete</v-icon>
-                </v-btn>
-              </v-list-tile-action>
-            </v-list-tile>
-          </v-list>
-        </v-card>
-      </v-flex>
-    </v-layout>
+                <v-list-tile-content>
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                  <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+
+                <v-list-tile-action>
+                  <v-btn v-on:click.stop.prevent="openDeleteDialog(item.id, item.title)" icon ripple>
+                    <v-icon color="grey lighten-1">delete</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
+              </v-list-tile>
+            </v-list>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </div>
 
     <!-- Continue with a file -->
 
-    <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent max-width="500">
-        <v-card>
-          <v-card-title class="headline">Do you want to continue with given file?</v-card-title>
-          <v-card-text>{{ selectedFileName }} is going to be used.</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat @click="backCleanGivenFile">Back</v-btn>
-            <v-btn color="green darken-1" flat @click="cleanGivenFile" :loading="loading">Continue</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-layout>
+    <v-dialog v-model="previewDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+
+      <progress-bar v-bind:value="previewProgress"
+                    v-bind:message="messageProgress"
+                    progressColor="#ff1d5e"/>
+
+      <Preview @back-clicked="backCleanGivenFile"
+               @continue-clicked="cleanGivenFile"
+               v-bind:selectedFileName="selectedFileName"/>
+
+    </v-dialog>
 
     <!-- Delete a file -->
 
@@ -121,12 +124,14 @@
 </template>
 
 <script>
-  import vueDropzone from "vue2-dropzone";
-  import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-  import {uuid} from 'vue-uuid';
-  import {mapMutations, mapGetters} from 'vuex'
+  import {uuid} from 'vue-uuid'
   import api from '@/services/api'
   import store from '../store/index'
+  import vueDropzone from "vue2-dropzone"
+  import Preview from '../components/Preview'
+  import {mapMutations, mapGetters} from 'vuex'
+  import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+  import ProgressBar from '../components/ProgressBar'
 
   export default {
     data: () => ({
@@ -139,16 +144,20 @@
         addRemoveLinks: true
       },
       uuid: null,
-      dialog: false,
       isError: false,
       loading: false,
       isSuccess: false,
       deleteDialog: false,
       selectedFileId: null,
-      selectedFileName: null
+      previewDialog: false,
+      messageProgress: null,
+      selectedFileName: null,
+      previewProgress: false
     }),
     components: {
-      vueDropzone
+      vueDropzone,
+      Preview,
+      ProgressBar
     },
     mounted: function () {
       this.GET_USER_FILES()
@@ -182,10 +191,13 @@
         this.$store.dispatch('GET_FILE_NAMES_GIVEN_USER', this.$store.getters.EMAIL).then()
       },
       selectFile(title, uuid) {
-        this.dialog = true
+        this.previewDialog = true
         this.selectedFileName = title
         this.uuid = uuid
-        this.SET_UUID(uuid)
+        this.SET_UUID(uuid)  // TODO:
+
+        let status = this.$store.dispatch("POST_PREVIEW_SOURCES", uuid) // TODO:
+        console.log(`Status is ${status}`)
       },
       openDeleteDialog(id, title) {
         this.deleteDialog = true
@@ -202,31 +214,30 @@
           this.deleteDialog = false
           this.isSuccess = true
           setTimeout(() => {
-          this.isSuccess = false
-        }, 5000)
+            this.isSuccess = false
+          }, 5000)
         } else {
           this.deleteDialog = false
           this.isError = true
           setTimeout(() => {
-          this.isError = false
-        }, 5000)
+            this.isError = false
+          }, 5000)
         }
       },
-      cleanGivenFile() {
-        this.loading = true;
-        let payload = []
-        let checkboxes = []
-        payload.push(this.uuid)
-        payload.push(checkboxes)
-        payload.push(10)
+      cleanGivenFile(payload) {
+        this.messageProgress = 'Processing...'
+        this.previewProgress = true
         this.$store.dispatch("CLEAN_PARAMETERS", payload).then(() => {
-          this.dialog = false
-          this.loading = false
+          this.previewDialog = false
+          this.previewProgress = false
+        }).catch(() => {
+          this.previewDialog = false
+          this.previewProgress = false
         })
       },
-      backCleanGivenFile() {
-        this.loading = false
-        this.dialog = false
+      backCleanGivenFile(value) {
+        // this.loading = value // TODO: If user does not want to wait processing...
+        this.previewDialog = value
       }
     }
   };

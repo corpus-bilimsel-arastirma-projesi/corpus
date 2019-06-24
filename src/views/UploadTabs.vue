@@ -12,7 +12,6 @@
     </v-tab>
 
     <v-tab-item :key="1">
-
       <Upload/>
     </v-tab-item>
 

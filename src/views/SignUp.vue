@@ -13,6 +13,7 @@
             :rules="emailRules"
             label="E-mail"
             required
+            v-on:keyup="enterPressed"
         ></v-text-field>
 
         <v-text-field
@@ -22,13 +23,13 @@
             :rules="passwordRules"
             label="Password"
             required
+            v-on:keyup="enterPressed"
         ></v-text-field>
 
         <v-checkbox
             v-model="checkbox"
             :rules="[v => !!v || 'You must agree to continue!']"
             label="Do you agree?"
-            required
         ></v-checkbox>
 
         <div>
@@ -146,7 +147,10 @@
       },
       resetValidation() {
         this.$refs.form.resetValidation()
-      }
+      },
+      enterPressed(e) {
+        e.key === "Enter" && this.validate()
+      },
     }
   }
 </script>
