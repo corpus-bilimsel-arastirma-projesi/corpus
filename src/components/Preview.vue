@@ -12,23 +12,26 @@
 
       <v-subheader>Source Comparison</v-subheader>
 
-      <split-panes class="default-theme" style="height: 400px">
+      <split-panes
+          class="default-theme"
+          style="height: 400px"
+          @resized="handleResize($event)"
+
+      >
 
         <div style="width: 100%; height: 100%;" splitpanes-min="20">
           {{PREVIEW_WORD_CLOUD}}
         </div>
 
         <div style="width: 100%; height: 100%;">
-          {{PREVIEW_VERTICAL_BAR}}
-          <!--<div class="word-cloud">-->
-          <!--<vue-word-cloud :words="PREVIEW_WORD_CLOUD">-->
-          <!--<template slot-scope="{text, weight, word}">-->
-          <!--<div v-tooltip="'Word: ' + text + ', Frequency: ' + weight" style="cursor: pointer;">-->
-          <!--{{ text }}-->
-          <!--</div>-->
-          <!--</template>-->
-          <!--</vue-word-cloud>-->
-          <!--</div>-->
+          <GChart
+              style="width: 100%; height: 100%"
+              type="BarChart"
+              :data="chartData"
+              :options="chartOptions"
+              :resizeDebounce="500"
+
+          />
         </div>
 
       </split-panes>
@@ -76,11 +79,13 @@
   import {mapGetters} from "vuex"
   import splitPanes from 'splitpanes'
   import vueWordCloud from 'vuewordcloud'
+  import {GChart} from 'vue-google-charts'
 
   export default {
     components: {
       splitPanes,
-      vueWordCloud
+      vueWordCloud,
+      GChart,
     },
     props: {
       selectedFileName: String,
@@ -91,7 +96,23 @@
           {label: "Stop Words", value: false},
           {label: "Punctuations", value: false}
         ],
-        howMany: 50
+        howMany: 50,
+        chartData: [
+          ['source', 'count'],
+          ['independent', 186],
+          ['times', 127],
+          ['guardian', 187],
+          ['telegraph', 211],
+          ['mail', 14],
+          ['mirror', 20],
+          ['new review', 2],
+        ],
+        chartOptions: {
+          chart: {
+            title: 'Company Performance',
+            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+          }
+        }
       }
     },
     computed: {
@@ -111,7 +132,12 @@
         payload.push(checkboxes)
         payload.push(10)
         this.$emit('continue-clicked', payload)
-      }
+      },
+      handleResize() {
+        this.chartData.push()
+        //bu force render gibi is yapiyo su an resize olunca bos push yapiyorum yenileniyo component
+
+      },
     }
   }
 </script>

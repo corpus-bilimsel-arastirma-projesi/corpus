@@ -21,6 +21,7 @@
     "vue-axios": "^2.1.4",
     "vue-d3-network": "^0.1.28",
     "vue-directive-tooltip": "^1.5.1",
+    "vue-google-charts": "^0.3.2",
     "vue-router": "^3.0.3",
     "vue-uuid": "^1.1.1",
     "vue2-dropzone": "^3.5.9",
