@@ -7,17 +7,17 @@ const POST_PREVIEW_SOURCES = async (context, payload) => {
     let verticalBar = []
     let verticalBarCategories = []
     for (let [key, value] of Object.entries(data)) {
-      console.log(`${key}: ${value}`)
-
       wordCloud.push({
         name: key,
         weight: parseInt(value)
       })
+
       verticalBar.push({
         name: key,
         color: '#1976D2',
         y: parseInt(value)
       })
+
       verticalBarCategories.push(key)
     }
 

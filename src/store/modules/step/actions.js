@@ -41,18 +41,24 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
     user: payload
   })
 
-  let USER_FILES = []
+  if (JSON.parse(res).data) {
+    let USER_FILES = []
 
-  JSON.parse(res).data.forEach(x => USER_FILES.push({
-    id: x.id,
-    uuid: x.uuid,
-    icon: 'assignment',
-    iconClass: 'blue white--text',
-    title: x.filename,
-    subtitle: Date.now()
-  }))
+    JSON.parse(res).data.forEach(x => USER_FILES.push({
+      id: x.id,
+      uuid: x.uuid,
+      icon: 'assignment',
+      iconClass: 'blue white--text',
+      title: x.filename,
+      subtitle: Date.now()
+    }))
 
-  context.commit("SET_USER_FILES", USER_FILES)
+    context.commit("SET_USER_FILES", USER_FILES)
+
+    return 200
+  } else {
+    return 404
+  }
 }
 
 const DELETE_FILE_GIVEN_USER = (context, payload) => {

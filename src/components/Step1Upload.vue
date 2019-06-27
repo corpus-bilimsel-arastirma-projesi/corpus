@@ -1,13 +1,6 @@
 <template>
   <div id="app">
     <div>
-      <!--<vue-dropzone-->
-      <!--ref="dropzone"-->
-      <!--id="drop1"-->
-      <!--:options="dropOptions"-->
-      <!--@vdropzone-complete="afterComplete"-->
-      <!--v-on:vdropzone-sending="sendingEvent">-->
-      <!--</vue-dropzone>-->
 
       <vue-dropzone
           ref="dropzone"
@@ -22,9 +15,8 @@
           <div class="subtitle">...or click to select a file from your computer</div>
         </div>
       </vue-dropzone>
-    </div>
 
-    <!--<v-btn style="margin-top: 50px;" @click="removeAllFiles">Remove All Files</v-btn>-->
+    </div>
 
     <transition name="fade">
       <v-alert
@@ -45,6 +37,17 @@
           dismissible
       >
         You have successfully removed given file.
+      </v-alert>
+    </transition>
+
+    <transition name="fade">
+      <v-alert
+          v-if="isPreview"
+          :value="isPreview"
+          type="success"
+          dismissible
+      >
+        Unable to preview chosen file.
       </v-alert>
     </transition>
 
@@ -147,6 +150,7 @@
       isError: false,
       loading: false,
       isSuccess: false,
+      isPreview: false,
       deleteDialog: false,
       selectedFileId: null,
       previewDialog: false,
@@ -187,17 +191,35 @@
         formData.append('uuid', uuid)
         formData.append('jwt', this.$store.getters.JWT_ACCESS)
       },
-      GET_USER_FILES() {
-        this.$store.dispatch('GET_FILE_NAMES_GIVEN_USER', this.$store.getters.EMAIL).then()
+      async GET_USER_FILES() {
+        let status = await this.$store.dispatch('GET_FILE_NAMES_GIVEN_USER', this.$store.getters.EMAIL)
+        if (status === 200) {
+          console.log(`User is authenticated.`)
+        } else if (status === 404) {
+          console.log(`User needs to authenticate!!!`)
+        }
       },
-      selectFile(title, uuid) {
-        this.previewDialog = true
+      async selectFile(title, uuid) {
+        this.messageProgress = 'Processing...'
+        this.previewProgress = true
+
         this.selectedFileName = title
         this.uuid = uuid
-        this.SET_UUID(uuid)  // TODO:
+        this.SET_UUID(uuid)
+        let status = await this.$store.dispatch("POST_PREVIEW_SOURCES", uuid)
 
-        let status = this.$store.dispatch("POST_PREVIEW_SOURCES", uuid) // TODO:
-        console.log(`Status is ${status}`)
+        if (status === 200) {
+          setTimeout(() => {
+            this.previewProgress = false
+            this.previewDialog = true
+          }, 1000)
+        } else if (status === 404) {
+          this.previewProgress = false
+          this.isPreview = true
+          setTimeout(() => {
+            this.isPreview = false
+          }, 5000)
+        }
       },
       openDeleteDialog(id, title) {
         this.deleteDialog = true

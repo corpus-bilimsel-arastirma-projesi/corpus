@@ -16,9 +16,10 @@
           class="default-theme"
           style="height: 400px"
           @resized="handleResize"
+          @ready="handleSize"
       >
 
-        <div style="width: 100%; height: 100%;" splitpanes-min="20">
+        <div splitpanes-min="20">
 
           <highcharts style="width: 100%; height: 100%;"
                       :options="wordCloudData"
@@ -27,12 +28,13 @@
 
         </div>
 
-        <div style="width: 100%; height: 100%;">
+        <div splitpanes-min="20">
 
           <highcharts style="width: 100%; height: 100%;"
                       :options="verticalBarData"
                       ref="verticalBarChart">
           </highcharts>
+
         </div>
 
       </split-panes>
@@ -169,6 +171,10 @@
       handleResize(event) {
         this.$refs.wordCloudChart.chart.setSize(window.innerWidth * event[0].width / 100, 400, false)
         this.$refs.verticalBarChart.chart.setSize(window.innerWidth * event[1].width / 100, 400, false)
+      },
+      handleSize() {
+        this.$refs.wordCloudChart.chart.setSize(window.innerWidth / 2, 400, false)
+        this.$refs.verticalBarChart.chart.setSize(window.innerWidth / 2, 400, false)
       }
     }
   }
@@ -188,10 +194,5 @@
     color: #fff;
     font-size: 5em;
     opacity: 0.6;
-  }
-
-  .word-cloud {
-    width: 100%;
-    height: 90%;
   }
 </style>
