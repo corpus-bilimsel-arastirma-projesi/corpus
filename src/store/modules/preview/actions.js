@@ -5,25 +5,25 @@ const POST_PREVIEW_SOURCES = async (context, payload) => {
   if (data) {
     let wordCloud = []
     let verticalBar = []
+    let verticalBarCategories = []
     for (let [key, value] of Object.entries(data)) {
       console.log(`${key}: ${value}`)
 
       wordCloud.push({
-        text: key,
-        weight: parseInt(value),
-        rotation: 1,
-        rotationUnit: 'turn',
-        fontFamily: 'Anton',
-        fontStyle: 'normal', // normal|italic|oblique|initial|inherit
-        fontVariant: 'normal', // normal|small-caps|initial|inherit
-        fontWeight: 'normal', // normal|bold|bolder|lighter|number|initial|inherit
-        color: '#' + (Math.random().toString(16) + "000000").substring(2, 8)
+        name: key,
+        weight: parseInt(value)
       })
-      verticalBar.push({key: key, value: parseInt(value)})
+      verticalBar.push({
+        name: key,
+        color: '#1976D2',
+        y: parseInt(value)
+      })
+      verticalBarCategories.push(key)
     }
 
     context.commit("SET_PREVIEW_WORD_CLOUD", wordCloud)
     context.commit("SET_PREVIEW_VERTICAL_BAR", verticalBar)
+    context.commit("SET_PREVIEW_VERTICAL_BAR_CATEGORIES", verticalBarCategories)
     return 200
   } else {
     context.commit("DEFAULT_PREVIEW_STATES")

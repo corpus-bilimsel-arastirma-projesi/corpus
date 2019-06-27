@@ -15,23 +15,24 @@
       <split-panes
           class="default-theme"
           style="height: 400px"
-          @resized="handleResize($event)"
-
+          @resized="handleResize"
       >
 
         <div style="width: 100%; height: 100%;" splitpanes-min="20">
-          {{PREVIEW_WORD_CLOUD}}
+
+          <highcharts style="width: 100%; height: 100%;"
+                      :options="wordCloudData"
+                      ref="wordCloudChart">
+          </highcharts>
+
         </div>
 
         <div style="width: 100%; height: 100%;">
-          <GChart
-              style="width: 100%; height: 100%"
-              type="BarChart"
-              :data="chartData"
-              :options="chartOptions"
-              :resizeDebounce="500"
 
-          />
+          <highcharts style="width: 100%; height: 100%;"
+                      :options="verticalBarData"
+                      ref="verticalBarChart">
+          </highcharts>
         </div>
 
       </split-panes>
@@ -43,12 +44,14 @@
     <v-list three-line subheader>
       <v-subheader>Options</v-subheader>
       <v-layout justify-center align-center>
-        <v-flex row xs2 v-for="c in checkboxes">
-          <v-checkbox
-              v-model="c.value"
-              :label="c.label"
-          ></v-checkbox>
-        </v-flex>
+        <div v-for="c in checkboxes">
+          <v-flex pr-3>
+            <v-checkbox
+                v-model="c.value"
+                :label="c.label"
+            ></v-checkbox>
+          </v-flex>
+        </div>
       </v-layout>
 
       <v-flex justify-center align-center xs6 offset-xs3 pt-3>
@@ -79,13 +82,10 @@
   import {mapGetters} from "vuex"
   import splitPanes from 'splitpanes'
   import vueWordCloud from 'vuewordcloud'
-  import {GChart} from 'vue-google-charts'
 
   export default {
     components: {
-      splitPanes,
-      vueWordCloud,
-      GChart,
+      splitPanes, vueWordCloud
     },
     props: {
       selectedFileName: String,
@@ -97,20 +97,30 @@
           {label: "Punctuations", value: false}
         ],
         howMany: 50,
-        chartData: [
-          ['source', 'count'],
-          ['independent', 186],
-          ['times', 127],
-          ['guardian', 187],
-          ['telegraph', 211],
-          ['mail', 14],
-          ['mirror', 20],
-          ['new review', 2],
-        ],
-        chartOptions: {
+        options: {
+          title: {
+            text: 'Source / Occurrences'
+          },
+
           chart: {
-            title: 'Company Performance',
-            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+            type: 'column'
+          },
+
+          xAxis: {
+            categories: []
+          },
+
+          series: []
+        },
+        wordCloudOptions: {
+          series: [{
+            type: 'wordcloud',
+            data: [],
+            name: 'Occurrences'
+          }],
+
+          title: {
+            text: 'WORDCLOUD'
           }
         }
       }
@@ -118,8 +128,26 @@
     computed: {
       ...mapGetters({
         PREVIEW_WORD_CLOUD: 'PREVIEW_WORD_CLOUD',
-        PREVIEW_VERTICAL_BAR: 'PREVIEW_VERTICAL_BAR'
-      })
+        PREVIEW_VERTICAL_BAR: 'PREVIEW_VERTICAL_BAR',
+        PREVIEW_VERTICAL_BAR_CATEGORIES: 'PREVIEW_VERTICAL_BAR_CATEGORIES'
+      }),
+      verticalBarData: function () {
+        let chart = this.options
+        chart.xAxis.categories = this.PREVIEW_VERTICAL_BAR_CATEGORIES
+        chart.series = [{
+          data: this.PREVIEW_VERTICAL_BAR
+        }]
+        return chart
+      },
+      wordCloudData: function () {
+        let wordCloudOptions = this.wordCloudOptions
+        wordCloudOptions.series = [{
+          type: 'wordcloud',
+          data: this.PREVIEW_WORD_CLOUD,
+          name: 'Occurrences'
+        }]
+        return wordCloudOptions
+      }
     },
     methods: {
       backClickButton() {
@@ -129,15 +157,19 @@
         let payload = []
         let checkboxes = []
         payload.push(this.$store.getters.UUID)
+        this.checkboxes.forEach(x => {
+          if (x.value === true) {
+            checkboxes.push(x.label)
+          }
+        })
         payload.push(checkboxes)
-        payload.push(10)
+        payload.push(this.howMany)
         this.$emit('continue-clicked', payload)
       },
-      handleResize() {
-        this.chartData.push()
-        //bu force render gibi is yapiyo su an resize olunca bos push yapiyorum yenileniyo component
-
-      },
+      handleResize(event) {
+        this.$refs.wordCloudChart.chart.setSize(window.innerWidth * event[0].width / 100, 400, false)
+        this.$refs.verticalBarChart.chart.setSize(window.innerWidth * event[1].width / 100, 400, false)
+      }
     }
   }
 </script>

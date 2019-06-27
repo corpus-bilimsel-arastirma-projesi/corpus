@@ -4,7 +4,8 @@ import mutations from './mutations'
 
 const state = {
   PREVIEW_WORD_CLOUD: null,
-  SET_PREVIEW_VERTICAL_BAR: null
+  SET_PREVIEW_VERTICAL_BAR: null,
+  PREVIEW_VERTICAL_BAR_CATEGORIES: null
 }
 
 export default {
