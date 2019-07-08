@@ -1,95 +1,87 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 17 18:37:23 2019
-
-@author: asuer
-pltly api DgWPnl5qUOsmsiYMefrk
-user : ahmetsuerdem
-
-"""
 
 # 1. Plotly scatter plots
-import plotly.plotly as py
 import plotly.graph_objs as go
-
+from plotly.offline import plot
 import pandas as pd
 
-#dfxx
+# 1. barplots
 
-df =pd.read_json('ai_cntries.json')
+def valueCounter(category,number,dataframe):
+    sr = dataframe[category].value_counts()
+    sr = pd.DataFrame(sr[(sr >= number)])
+# replace sr w others
+    sr = sr.sort_values(by=category, ascending=True)
+    data = [go.Bar(
+        x=sr.source,
+        y=sr.index,
+        orientation='h')]
+    layout = go.Layout(
+        title="Number of AI articles by newspapers"
+    )
+    fig = go.Figure(data=data, layout=layout)
+    plot(fig, auto_open=True)
+    print(fig)
 
-#1. barplots
-sr = df['source'].value_counts()
-sr = pd.DataFrame(sr[(sr >= 20)])
-con = pd.DataFrame(df['country'].value_counts())
-yr = pd.DataFrame(df['year'].value_counts())
+#########################################
 
-sr = sr.sort_values(by='source', ascending=True)
-data  = go.Data([
-            go.Bar(
-              y = sr.index,
-              x = sr.source,
-              orientation='h'
-        )])
-layout = go.Layout(
-        title = "Number of AI articles by newspapers"
-)
-fig  = go.Figure(data=data, layout=layout)
-py.plot(fig)
+# 2. stacked barplots
+def stackedPlot(category1,category2,dataframe):
+    test5 = pd.crosstab(index=dataframe[category1], columns=dataframe[category2])
 
-#2. stacked barplots
-temp1 = pd.crosstab(df['source']  ,df['year'])
-temp1.reset_index(level=0, inplace=True)
+    li = []
+    for i in test5:
+        x = test5[i].to_dict()
+        li.append(x)
+    x_data = []
+    y_data = []
+    for i in li:
+        x = list(i.keys())
+        y = list(i.values())
+        x_data.append(x)
+        y_data.append(y)
 
+    traces = []
+    for i in range(0, len(dataframe[category2].unique())):
+        traces.append(go.Bar(
+            x=x_data[i],
+            y=y_data[i],
+            name=str(test5.columns[i])
+        ))
 
-trace1 = go.Bar(
-    x=temp1['source'],
-    y=temp1[2016],
-    name='2016'
-)
-trace2 = go.Bar(
-    x=temp1['source'],
-    y=temp1[2017],
-    name='2017'
-)
+    layout = go.Layout(
+        barmode='stack')
 
-trace3 = go.Bar(
-    x=temp1['source'],
-    y=temp1[2018],
-    name='2017'
-)
+    fig = go.Figure(data=traces, layout=layout)
+    plot(fig)
 
-trace4 = go.Bar(
-    x=temp1['source'],
-    y=temp1[2019],
-    name='2017'
-)
+##########################################
+# 3. date with sliderand smoother
+'''
+from scipy import signal
 
-layout = go.Layout(
-    barmode='relative')
-
-
-data =[trace1, trace2, trace3, trace4]
-fig=dict(data =data, layout=layout )
-py.plot(fig)
-
-
-#3. DATE
-dt =pd.DataFrame(df['date'].value_counts())
+dt = pd.DataFrame(df['date'].value_counts())
 dt.reset_index(level=0, inplace=True)
 dt = dt.sort_values(by='index', ascending=True)
-dt.columns
+dt['dat'] = pd.to_datetime(dt['index'], format='%Y')
 
+trace1 = go.Scatter(
+    x=dt['dat'],
+    y=dt['date'],
+    line=dict(color='#7F7F7F'),
+    opacity=0.8)
 
-dt['index']=pd.to_datetime(dt['index'], format='%Y')
-
-
-
-data = [go.Scatter(
-                x=dt['index'],
-                y=dt.date,
-                line = dict(color = '#7F7F7F'),
-                opacity = 0.8)]
+trace2 = go.Scatter(
+    x=dt['dat'],
+    y=signal.savgol_filter(dt['date'], 75, 10),
+    mode='markers',
+    marker=dict(
+        size=6,
+        color='#C190F0',
+        symbol='triangle-up'
+    ),
+    name='Savitzky-Golay'
+)
 
 layout = dict(
     title='Time Series with Rangeslider',
@@ -108,13 +100,44 @@ layout = dict(
             ])
         ),
         rangeslider=dict(
-            visible = True
+            visible=True
         ),
         type='date'
     )
 )
 
-fig = dict(data=data, layout=layout)
-py.plot(fig)
+data = [trace1, trace2]
+fig = go.Figure(data=data, layout=layout)
+plot(fig)
+'''
+########################
+# 4. with multiple lines date
 
+def multipleLinesGraph(category1,category2,dataframe):
+    test6 = pd.crosstab(index=dataframe[category1], columns=dataframe[category2])
+    test6 = test6.sort_values(by=category1, ascending=True)
 
+    li = []
+    for i in test6:
+        x = test6[i].to_dict()
+        li.append(x)
+    x_data = []
+    y_data = []
+    for i in li:
+        x = list(i.keys())
+        y = list(i.values())
+        x_data.append(x)
+        y_data.append(y)
+
+    traces = []
+    for i in range(0, len(dataframe[category2].unique())):
+        traces.append(go.Scatter(
+            x=x_data[i],
+            y=y_data[i],
+            name=test6.columns[i],
+            mode='lines',
+            connectgaps=True
+        ))
+
+    fig = go.Figure(data=traces)
+    plot(fig)
