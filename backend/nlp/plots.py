@@ -7,23 +7,22 @@ import pandas as pd
 
 # 1. barplots
 
+#does not work properly unless category=source
 def valueCounter(category,number,dataframe):
     sr = dataframe[category].value_counts()
     sr = pd.DataFrame(sr[(sr >= number)])
 # replace sr w others
     sr = sr.sort_values(by=category, ascending=True)
     data = [go.Bar(
-        x=sr.source,
+        x=getattr(sr,category),
         y=sr.index,
         orientation='h')]
     layout = go.Layout(
-        title="Number of AI articles by newspapers"
+        title="There is a title"
     )
     fig = go.Figure(data=data, layout=layout)
-    plot(fig, auto_open=True)
-    print(fig)
-
-#########################################
+    #plot(fig, auto_open=True)
+    return fig
 
 # 2. stacked barplots
 def stackedPlot(category1,category2,dataframe):
@@ -53,9 +52,9 @@ def stackedPlot(category1,category2,dataframe):
         barmode='stack')
 
     fig = go.Figure(data=traces, layout=layout)
-    plot(fig)
+    #plot(fig)
+    return fig
 
-##########################################
 # 3. date with sliderand smoother
 '''
 from scipy import signal
@@ -110,7 +109,7 @@ data = [trace1, trace2]
 fig = go.Figure(data=data, layout=layout)
 plot(fig)
 '''
-########################
+
 # 4. with multiple lines date
 
 def multipleLinesGraph(category1,category2,dataframe):
@@ -140,4 +139,8 @@ def multipleLinesGraph(category1,category2,dataframe):
         ))
 
     fig = go.Figure(data=traces)
-    plot(fig)
+    #plot(fig)
+    return fig
+
+
+
