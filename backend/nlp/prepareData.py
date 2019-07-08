@@ -2,21 +2,21 @@
 import pandas as pd
 import re
 
-#dosyayı alıp dataframe'e cevirmek icin.
+#to get file and convert into dataframe
 def getFile(file):
-    dataFrame = pd.read_json(file) #simdilik json, degisebilir
+    dataFrame = pd.read_json(file) #currently only json files
     return dataFrame
 
-#birden fazla dosyayı birlestirip kullanmak isterse
+#to concat many files and use them together
 def fileConcat(fileList):
     dataFrame = pd.concat(fileList,ignore_index=True)
     return dataFrame
 
-#dataframe'in columnlarını(content,source vs.) liste olarak verir
+#gives columns(source, content etc.) of dataframe as a list
 def listColumn(dataframe):
     return list(dataframe.columns)
 
-#düzelt ekleme yap, sadece yıl icin, ay ve günü ekle
+#user may select the date(day,month,year) and create new column to use it later
 def chooseDate(dateVar,dataframe):
     if 'date' in dataframe.columns:
         dataframe['date'] = pd.to_datetime(dataframe['date'])
@@ -27,9 +27,11 @@ def chooseDate(dateVar,dataframe):
         dataframe.loc[:, dateVar] = yr
     return dataframe
 
+#gives slice of dataframe with selected category
 def chooseCategory(category, dataframe):
     return dataframe[category]
 
+#cleaning given dataframeslice(dataframeslice means = dataframe["category"])
 def cleanDataframe(dataframeWithCategory):
     dataframeWithCategory = dataframeWithCategory.str.lower().str.strip()
     dataframeWithCategory = dataframeWithCategory.replace(r'\W+', ' ', regex=True)
@@ -37,27 +39,40 @@ def cleanDataframe(dataframeWithCategory):
     #of course there will be more cleaning methods
     return dataframeWithCategory
 
+#value count of given dataframeslice
 def showValueCounts(dataframeSlice):
     return dataframeSlice.value_counts()
 
+#optional cleaning methods
+#to delete all characters between given words (included given words)
 def deleteBetween(startWord, endWord, dataframe):
     pattern = startWord + "(.*)" + endWord
     for j in range(len(dataframe)):
         dataframe.iloc[j] = re.sub(pattern, '', dataframe.iloc[j], flags=re.DOTALL)
     return dataframe
 
+#to delete specific word
 def deleteWord(word, dataframe):
+    pattern = r" "+ word+ " "
+    for j in range(len(dataframe)):
+        dataframe.iloc[j] = re.sub(pattern,' ',dataframe.iloc[j], flags=re.DOTALL)
+    return dataframe
+
+#delete words that contains given characterset
+def deleteContain(word,dataframe):
     pattern = word
     for j in range(len(dataframe)):
         dataframe.iloc[j] = re.sub(pattern,'',dataframe.iloc[j], flags=re.DOTALL)
     return dataframe
 
+#to delete words that starts with given characterset
 def deleteBeginning(start,dataframe):
     pattern =   start + r'[a-zA-Z0-9_.+-]+'
     for j in range(len(dataframe)):
         dataframe.iloc[j] = re.sub(pattern,"",dataframe.iloc[j])
     return dataframe
 
+#to delete words that ends with given characterset
 def deleteEnd(end,dataframe):
     pattern = r'[a-zA-Z0-9_.+-]+' + end
     for j in range(len(dataframe)):
@@ -74,9 +89,3 @@ df['source'].value_counts()
 '''
 
 # df.to_json(r'ai_cntries.json')
-
-frame = getFile("D:/jsons/UK_afterJaccard.json")
-print(listColumn(frame))
-print(chooseDate("day",frame))
-print(listColumn(frame))
-print(showValueCounts(cleanDataframe(chooseCategory("source",frame))))
