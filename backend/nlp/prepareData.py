@@ -27,6 +27,12 @@ def chooseDate(dateVar,dataframe):
         dataframe.loc[:, dateVar] = yr
     return dataframe
 
+#replaces date format from 03/07/1970 to 03-07-1970
+def replaceDateFormat(dataframeDate):
+    for j in range(len(dataframeDate)):
+        dataframeDate.iloc[j] = re.sub(r'/', '-', dataframeDate.iloc[j], flags=re.DOTALL)
+    return dataframeDate
+
 #gives slice of dataframe with selected category
 def chooseCategory(category, dataframe):
     return dataframe[category]
