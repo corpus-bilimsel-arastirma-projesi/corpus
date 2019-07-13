@@ -5,27 +5,29 @@ import plotly.graph_objs as go
 from plotly.offline import plot
 import pandas as pd
 
+
 # 1. barplots
 
-#does not work properly unless category=source
-def valueCounter(category,number,dataframe):
+# does not work properly unless category=source
+def valueCounter(category, number, dataframe):
     sr = dataframe[category].value_counts()
     sr = pd.DataFrame(sr[(sr >= number)])
-# replace sr w others
+    # replace sr w others
     sr = sr.sort_values(by=category, ascending=True)
     data = [go.Bar(
-        x=getattr(sr,category),
+        x=getattr(sr, category),
         y=sr.index,
         orientation='h')]
     layout = go.Layout(
         title="There is a title"
     )
     fig = go.Figure(data=data, layout=layout)
-    #plot(fig, auto_open=True)
+    # plot(fig, auto_open=True)
     return fig
 
+
 # 2. stacked barplots
-def stackedPlot(category1,category2,dataframe):
+def stackedPlot(category1, category2, dataframe):
     test5 = pd.crosstab(index=dataframe[category1], columns=dataframe[category2])
 
     li = []
@@ -52,8 +54,9 @@ def stackedPlot(category1,category2,dataframe):
         barmode='stack')
 
     fig = go.Figure(data=traces, layout=layout)
-    #plot(fig)
+    # plot(fig)
     return fig
+
 
 # 3. date with sliderand smoother
 '''
@@ -110,9 +113,10 @@ fig = go.Figure(data=data, layout=layout)
 plot(fig)
 '''
 
+
 # 4. with multiple lines date
 
-def multipleLinesGraph(category1,category2,dataframe):
+def multipleLinesGraph(category1, category2, dataframe):
     test6 = pd.crosstab(index=dataframe[category1], columns=dataframe[category2])
     test6 = test6.sort_values(by=category1, ascending=True)
 
@@ -139,8 +143,5 @@ def multipleLinesGraph(category1,category2,dataframe):
         ))
 
     fig = go.Figure(data=traces)
-    #plot(fig)
+    # plot(fig)
     return fig
-
-
-

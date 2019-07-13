@@ -7,7 +7,7 @@ from nltk.probability import FreqDist
 
 def clean_and_tokenize(file):
     # with open('..\media\\'+filename) as fil:
-    data = json.load(file)
+    data = json.loads(file)
 
     nltk.download('stopwords')
     nltk.download('punkt')
