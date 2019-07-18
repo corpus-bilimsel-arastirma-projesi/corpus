@@ -25,6 +25,14 @@ const router = new Router({
       }
     },
     {
+      path: '/plotly',
+      name: 'plotly',
+      component: () => import(/* webpackChunkName: "about" */ './views/Plot'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/sign-up',
       name: 'sign-up',
       component: () => import('./views/SignUp')

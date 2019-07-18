@@ -22,7 +22,7 @@ const initSession = () => {
     return
   } else if (isAfter(time, refreshTokenExpiry)) {
     store.commit("DEFAULT_STEP_STATES")
-    store.commit("DEFAULT_QUERY_STATES")
+    store.commit("DEFAULT_PLOTLY_STATES")
     store.commit("DEFAULT_PREVIEW_STATES")
     store.commit("REMOVE_TOKEN")
     return router.push("/sign-in")

@@ -3,6 +3,9 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
+  PREVIEW_SOURCES: null,
+  STACKED: null,
+  MULTIPLE_LINES: null
 }
 
 export default {

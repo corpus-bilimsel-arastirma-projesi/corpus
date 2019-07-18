@@ -1,157 +1,138 @@
 <template>
   <v-app>
 
+    <!-- Content -->
+
     <v-layout column>
-
-      <v-stepper fixed :value="STEP_NUMBER">
-
-        <v-stepper-header>
-
-          <v-stepper-step :complete="STEP_NUMBER > 1" step="1">Preparing Data</v-stepper-step> <!-- editable -->
-
-          <v-divider></v-divider>
-
-          <v-stepper-step :complete="STEP_NUMBER > 2" step="2">Preview - Processing</v-stepper-step>
-
-          <v-divider></v-divider>
-
-          <v-stepper-step :complete="STEP_NUMBER > 3" step="3">Cleaning</v-stepper-step>
-
-          <v-divider></v-divider>
-
-          <v-stepper-step :complete="STEP_NUMBER > 4" step="4">Download</v-stepper-step>
-
-        </v-stepper-header>
-
-        <v-stepper-items>
-          <v-stepper-content step="1">
-            <h1>Please choose method from tabs.</h1>
-            <UploadTabs/>
-
-          </v-stepper-content>
-
-          <v-stepper-content step="2">
-
-            <Step2/>
-
-          </v-stepper-content>
-
-          <v-stepper-content step="3">
-
-            <Step3/>
-
-          </v-stepper-content>
-
-          <v-stepper-content step="4">
-
-            <Step4/>
-
-          </v-stepper-content>
-        </v-stepper-items>
-
-
-      </v-stepper>
-
-
+      <div class="container">
+        <h1 style="display: flex; justify-content: center;">UPLOAD JSON FILE</h1>
+        <files
+            @delete-file-modal="openDeleteFileModal"
+            :is-error="isError"
+            :is-success="isSuccess"
+        >
+        </files>
+      </div>
     </v-layout>
 
-    <v-layout class="footer">
-      <div class="submit">
+    <!-- Footer -->
 
-        <v-btn
-            class="cancel"
-            v-on:click="back"
-            color="primary">
-          {{ buttonName }}
-        </v-btn>
+    <v-footer fixed class="pa-3" height="60" flat style="display: flex; justify-content: center;">
+      <v-btn color="info" style="width: 50%;" v-on:click="goNextPage">
+        CONTINUE
+      </v-btn>
+    </v-footer>
 
-        <v-divider></v-divider>
+    <!-- DIALOGS: OUT OF PAGE -->
 
-        <v-btn
-            class="continue"
-            color="primary"
-            @click="increaseStep"
-            :disabled="READY === false">
-          Continue
-        </v-btn>
+    <!-- Progress Bar -->
 
-      </div>
+    <progress-bar v-bind:value="previewProgress"
+                  v-bind:message="messageProgress"
+                  progressColor="#ff1d5e"
+    ></progress-bar>
+
+    <!-- Delete File Modal -->
+
+    <v-layout row justify-center>
+      <v-dialog v-model="deleteFileModal" persistent max-width="500">
+        <v-card>
+          <v-card-title class="headline">Do you want to delete given file?</v-card-title>
+          <v-card-text>{{ fileName }} is going to be deleted.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="deleteFileModal = false">Back</v-btn>
+            <v-btn color="green darken-1" flat @click="deleteFile">Continue</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-layout>
 
   </v-app>
 </template>
 
 <script>
-  import Step2 from '../components/Step2'
-  import Step3 from '../components/Step3'
-  import Step4 from '../components/Step4'
-  import UploadTabs from './UploadTabs'
-
-  import {mapMutations, mapGetters} from 'vuex'
+  import Files from '../components/Files'
+  import {mapGetters, mapActions} from 'vuex'
   import {initSession} from "../session-manager"
+  import ProgressBar from '../components/operations/ProgressBar'
 
   export default {
     components: {
-      Step2,
-      Step3,
-      Step4,
-      UploadTabs
+      Files, ProgressBar
     },
     data() {
       return {
-        buttonName: ''
+        fileId: null,
+        fileName: null,
+        isError: false,
+        isSuccess: false,
+        messageProgress: null,
+        deleteFileModal: false,
+        previewProgress: false,
       }
     },
     computed: {
       ...mapGetters({
-        READY: 'READY',
-        STEP_NUMBER: 'STEP_NUMBER',
-        BUTTON_NAME: 'BUTTON_NAME',
+        USER_FILES: 'USER_FILES'
       }),
     },
     mounted() {
       initSession()
     },
-    updated() {
-      this.buttonName = this.BUTTON_NAME;
-    },
-    created() {
-      this.buttonName = this.BUTTON_NAME;
-    },
     methods: {
-      ...mapMutations({
-        SET_READY: 'SET_READY',
-        SET_STEP_NUMBER: 'SET_STEP_NUMBER',
-        SET_BUTTON_NAME: 'SET_BUTTON_NAME'
+      ...mapActions({
+        GET_PREVIEW_SOURCES: 'GET_PREVIEW_SOURCES',
+        DELETE_FILE_GIVEN_USER: 'DELETE_FILE_GIVEN_USER',
+        GET_FILE_NAMES_GIVEN_USER: 'GET_FILE_NAMES_GIVEN_USER',
       }),
-      increaseStep() {
-        let step = parseInt(this.STEP_NUMBER)
-        if (step !== 2) {
-          this.SET_READY(false)
-        }
-        if (step !== 4) {
-          this.SET_STEP_NUMBER(step + 1)
-          if (parseInt(this.STEP_NUMBER) === 3) {
-            window.location.reload()
+      openDeleteFileModal(id, name) {
+        this.fileId = id
+        this.fileName = name
+        this.deleteFileModal = true
+      },
+      async deleteFile() {
+        let res = await this.DELETE_FILE_GIVEN_USER(this.fileId)
+
+        if (res.success === true) {
+
+          let status = await this.GET_FILE_NAMES_GIVEN_USER(this.$store.getters.EMAIL)
+          if (status === 200) {
+            console.log(`User is authenticated.`) // TODO: Make decision
+          } else if (status === 404) {
+            console.log(`User needs to authenticate!!!`)
           }
-        }
-        if (step === 1) {
-          this.SET_BUTTON_NAME('Back')
-          this.buttonName = 'Back'
+
+          this.deleteFileModal = false
+
+          this.isSuccess = true
+          setTimeout(() => this.isSuccess = false, 5000)
+
+        } else {
+          this.deleteFileModal = false
+
+          this.isError = true
+          setTimeout(() => this.isError = false, 5000)
+
         }
       },
-      back() {
-        let step = parseInt(this.STEP_NUMBER)
-        if (step !== 1) {
-          this.SET_STEP_NUMBER(step - 1);
-        }
-        if (step === 2) {
-          this.SET_BUTTON_NAME('Cancel')
-          this.buttonName = 'Cancel'
-        }
-        if (step === 4) {
-          this.SET_READY(true)
-          window.location.reload()
+      async goNextPage() {
+        this.messageProgress = 'Processing...'
+        this.previewProgress = true
+
+        let files = this.USER_FILES.filter(x => x.checkbox === true)
+
+        if (files.length > 0) {
+          let status = await this.GET_PREVIEW_SOURCES(files[0].uuid)
+
+          if (status === 200) {
+            this.previewProgress = false
+            this.$router.push({path: '/plotly'})
+          } else {
+            setTimeout(() => this.previewProgress = false, 2000) // TODO: Falsy
+          }
+        } else {
+          setTimeout(() => this.previewProgress = false, 2000) // TODO: Falsy
         }
       }
     }
@@ -159,42 +140,5 @@
 </script>
 
 <style lang="stylus" scoped>
-
-  .v-progress-circular
-    margin: 1rem
-
-  .footer {
-    background-color: #F5F5F5;
-    position: fixed;
-    height: 60px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-bottom: 0;
-  }
-
-  .submit {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-  }
-
-  .continue {
-    position: absolute;
-    top: 5px;
-    right: 25px;
-  }
-
-  .default {
-    position: absolute;
-    top: 5px;
-    right: 150px;
-  }
-
-  .cancel {
-    position: absolute;
-    top: 5px;
-    left: 25px;
-  }
 
 </style>
