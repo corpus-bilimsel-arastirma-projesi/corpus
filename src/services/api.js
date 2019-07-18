@@ -10,7 +10,7 @@ const http = axios.create({
 
 http.interceptors.request.use (
   function (config) {
-    const token = store.getters.JWT_ACCESS || localStorage.getItem('a');
+    const token = store.getters.JWT_ACCESS || localStorage.getItem('accessToken');
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config
   },
