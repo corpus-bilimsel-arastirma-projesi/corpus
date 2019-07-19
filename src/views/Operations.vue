@@ -10,18 +10,16 @@
             @delete-file-modal="openDeleteFileModal"
             :is-error="isError"
             :is-success="isSuccess"
-        >
-        </files>
+        ></files>
       </div>
     </v-layout>
 
     <!-- Footer -->
 
-    <v-footer fixed class="pa-3" height="60" flat style="display: flex; justify-content: center;">
-      <v-btn color="info" style="width: 50%;" v-on:click="goNextPage">
-        CONTINUE
-      </v-btn>
-    </v-footer>
+    <operation-footer
+        @continue-click="goNextPage"
+        button-name="Continue"
+    ></operation-footer>
 
     <!-- DIALOGS: OUT OF PAGE -->
 
@@ -55,11 +53,12 @@
   import Files from '../components/Files'
   import {mapGetters, mapActions} from 'vuex'
   import {initSession} from "../session-manager"
+  import OperationFooter from '../components/operations/Footer'
   import ProgressBar from '../components/operations/ProgressBar'
 
   export default {
     components: {
-      Files, ProgressBar
+      Files, ProgressBar, OperationFooter
     },
     data() {
       return {
