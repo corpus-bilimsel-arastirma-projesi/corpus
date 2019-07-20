@@ -56,4 +56,4 @@ export default {
   OBTAIN_TOKEN,
   REMOVE_TOKEN,
   REFRESH_TOKEN
-};
+}

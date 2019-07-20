@@ -33,6 +33,22 @@ const router = new Router({
       }
     },
     {
+      path: '/preparation',
+      name: 'preparation',
+      component: () => import(/* webpackChunkName: "about" */ './views/Preparation'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/preparation2',
+      name: 'preparation2',
+      component: () => import(/* webpackChunkName: "about" */ './views/Preparation2'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/sign-up',
       name: 'sign-up',
       component: () => import('./views/SignUp')
