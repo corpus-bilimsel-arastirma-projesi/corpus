@@ -14,6 +14,6 @@ class File(models.Model):
         return {
             "id": self.id,
             "filename": self.file_name,
-            "date": str(self.date),
+            "date": str(self.date.date()) + " " + str(self.date.hour) + ":" + str(self.date.minute),
             "is_ready": self.is_ready,
         }

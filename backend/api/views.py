@@ -290,9 +290,10 @@ class ColumnMapping(APIView):
     def post(self, request):
         file = File.objects.get(id=request.data['id'])
         columns = request.data['columns']
-        data_frame = json_to_data_frame(file.edited_json)
+        data_frame = json_to_data_frame(file.json)
 
         file.edited_json = column_mapping(columns, data_frame)
+        file.is_ready = True
         file.save()
 
         return Response({'success': True})
