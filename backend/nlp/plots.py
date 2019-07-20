@@ -9,7 +9,7 @@ import pandas as pd
 # 1. barplots
 
 # does not work properly unless category=source
-def valueCounter(category, number, dataframe):
+def value_counter(category, number, dataframe):
     sr = dataframe[category].value_counts()
     sr = pd.DataFrame(sr[(sr >= number)])
     # replace sr w others
@@ -27,7 +27,7 @@ def valueCounter(category, number, dataframe):
 
 
 # 2. stacked barplots
-def stackedPlot(category1, category2, dataframe):
+def stacked_plot(category1, category2, dataframe):
     test5 = pd.crosstab(index=dataframe[category1], columns=dataframe[category2])
 
     li = []
@@ -116,7 +116,7 @@ plot(fig)
 
 # 4. with multiple lines date
 
-def multipleLinesGraph(category1, category2, dataframe):
+def multiple_lines_graph(category1, category2, dataframe):
     test6 = pd.crosstab(index=dataframe[category1], columns=dataframe[category2])
     test6 = test6.sort_values(by=category1, ascending=True)
 

@@ -4,99 +4,83 @@ import re
 
 
 # to get file and convert into dataframe
-def getFile(file):
-    dataFrame = pd.read_json(file)  # currently only json files
-    return dataFrame
+def json_to_data_frame(file):
+    data_frame = pd.read_json(file)  # currently only json files
+    return data_frame
+
+
+def data_frame_to_json(file):
+    data_frame = pd.read_json(file)  # currently only json files
+    return data_frame.to_json()
 
 
 # to concat many files and use them together
-def fileConcat(fileList):
-    dataFrame = pd.concat(fileList, ignore_index=True)
-    return dataFrame
-
-
-# gives columns(source, content etc.) of dataframe as a list
-def listColumn(dataframe):
-    return list(dataframe.columns)
+def file_concat(file_list):
+    data_frame = pd.concat(file_list, ignore_index=True)
+    return data_frame.to_json()
 
 
 # user may select the date(day,month,year) and create new column to use it later
-def chooseDate(dateVar, dataframe):
-    if 'date' in dataframe.columns:
-        dataframe['date'] = pd.to_datetime(dataframe['date'])
+def choose_date(date_var, data_frame):
+    if 'date' in data_frame.columns:
+        data_frame['date'] = pd.to_datetime(data_frame['date'])
         yr = []
-        for date in dataframe['date']:
-            xx = getattr(date, dateVar)
+        for date in data_frame['date']:
+            xx = getattr(date, date_var)
             yr.append(str(xx))
-        dataframe.loc[:, dateVar] = yr
-    return dataframe
-
-
-# replaces date format from 03/07/1970 to 03-07-1970
-def replaceDateFormat(dataframeDate):
-    for j in range(len(dataframeDate)):
-        dataframeDate.iloc[j] = re.sub(r'/', '-', dataframeDate.iloc[j], flags=re.DOTALL)
-    return dataframeDate
-
-
-# gives slice of dataframe with selected category
-def chooseCategory(category, dataframe):
-    return dataframe[category]
-
-
-# cleaning given dataframeslice(dataframeslice means = dataframe["category"])
-def cleanDataframe(dataframeWithCategory):
-    dataframeWithCategory = dataframeWithCategory.str.lower().str.strip()
-    dataframeWithCategory = dataframeWithCategory.replace(r'\W+', ' ', regex=True)
-    dataframeWithCategory = dataframeWithCategory.str.encode('ascii', 'ignore').str.decode('ascii')
-    # of course there will be more cleaning methods
-    return dataframeWithCategory
-
-
-# value count of given dataframeslice
-def showValueCounts(dataframeSlice):
-    return dataframeSlice.value_counts()
+        data_frame.loc[:, date_var] = yr
+    return data_frame.to_json()
 
 
 # optional cleaning methods
 # to delete all characters between given words (included given words)
-def deleteBetween(startWord, endWord, dataframe):
-    pattern = startWord + "(.*)" + endWord
-    for j in range(len(dataframe)):
-        dataframe.iloc[j] = re.sub(pattern, '', dataframe.iloc[j], flags=re.DOTALL)
-    return dataframe
+def delete_between(start_word, end_word, data_frame):
+    pattern = start_word + "(.*)" + end_word
+    for j in range(len(data_frame)):
+        data_frame.iloc[j] = re.sub(pattern, '', data_frame.iloc[j], flags=re.DOTALL)
+    return data_frame.to_json()
 
 
 # to delete specific word
-def deleteWord(word, dataframe):
+def delete_word(word, data_frame):
     pattern = r" " + word + " "
-    for j in range(len(dataframe)):
-        dataframe.iloc[j] = re.sub(pattern, ' ', dataframe.iloc[j], flags=re.DOTALL)
-    return dataframe
+    for j in range(len(data_frame)):
+        data_frame.iloc[j] = re.sub(pattern, ' ', data_frame.iloc[j], flags=re.DOTALL)
+    return data_frame.to_json()
 
 
 # delete words that contains given characterset
-def deleteContain(word, dataframe):
+def delete_contain(word, data_frame):
     pattern = word
-    for j in range(len(dataframe)):
-        dataframe.iloc[j] = re.sub(pattern, '', dataframe.iloc[j], flags=re.DOTALL)
-    return dataframe
+    for j in range(len(data_frame)):
+        data_frame.iloc[j] = re.sub(pattern, '', data_frame.iloc[j], flags=re.DOTALL)
+    return data_frame.to_json()
 
 
 # to delete words that starts with given characterset
-def deleteBeginning(start, dataframe):
+def delete_beginning(start, data_frame):
     pattern = start + r'[a-zA-Z0-9_.+-]+'
-    for j in range(len(dataframe)):
-        dataframe.iloc[j] = re.sub(pattern, "", dataframe.iloc[j])
-    return dataframe
+    for j in range(len(data_frame)):
+        data_frame.iloc[j] = re.sub(pattern, "", data_frame.iloc[j])
+    return data_frame.to_json()
 
 
 # to delete words that ends with given characterset
-def deleteEnd(end, dataframe):
+def delete_end(end, data_frame):
     pattern = r'[a-zA-Z0-9_.+-]+' + end
-    for j in range(len(dataframe)):
-        dataframe.iloc[j] = re.sub(pattern, "", dataframe.iloc[j])
-    return dataframe
+    for j in range(len(data_frame)):
+        data_frame.iloc[j] = re.sub(pattern, "", data_frame.iloc[j])
+    return data_frame.to_json()
+
+
+# replaces list of words with given targetword
+def replace_words(word_list, target_word, data_frame):
+    dict = {}
+    for word in word_list:
+        dict.update({word: target_word})
+    data_frame = pd.DataFrame(data_frame)
+    data_frame = data_frame.replace(dict, regex=True)
+    return data_frame.to_json()
 
 
 # burasi degisti
@@ -107,4 +91,39 @@ df['source'] = df['source'].str.replace(' ', '')
 df['source'].value_counts()
 '''
 
+
 # df.to_json(r'ai_cntries.json')
+
+# replaces date format from 03/07/1970 to 03-07-1970
+
+# dataframe olarak al dataframeDate oalrak değil.
+def replace_date_format(data_frame):
+    for j in range(len(data_frame['date'])):
+        data_frame['date'].iloc[j] = re.sub(r'/', '-', data_frame['date'].iloc[j], flags=re.DOTALL)
+    return data_frame
+
+
+# gives columns(source, content etc.) of dataframe as a list
+def list_column(data_frame):
+    return list(data_frame.columns)
+
+
+# gives slice of dataframe with selected category
+def choose_category(category, data_frame):
+    return data_frame[category]
+
+
+# cleaning given dataframeslice(dataframeslice means = dataframe["category"])
+
+# dataframe değiştirmek istediği kategori haricinde diğerleri olduğu gibi kalacak, kategori için bu temizliği yapıp updated dataframei return et.
+def clean_data_frame(data_frame, category):
+    data_frame[category] = data_frame[category].str.lower().str.strip()
+    data_frame[category] = data_frame[category].replace(r'\W+', ' ', regex=True)
+    data_frame[category] = data_frame[category].str.encode('ascii', 'ignore').str.decode('ascii')
+    # of course there will be more cleaning methods
+    return data_frame
+
+
+# value count of given dataframeslice
+def show_value_counts(data_frame_slice):
+    return data_frame_slice.value_counts()

@@ -3,16 +3,15 @@ from django.db import models
 
 
 class File(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=3)
-    file = models.FileField(blank=False, null=False)
-    json = models.TextField(default='old')
-    remark = models.CharField(max_length=20)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    uuid = models.CharField(max_length=50, null=False, default="old")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    file_name = models.CharField(max_length=100)
+    json = models.TextField(default='Json', null=False)
+    edited_json = models.TextField(default='Json', blank=True)
 
     def as_dict(self):
         return {
             "id": self.id,
-            "filename": str(self.file),
-            "uuid": self.uuid
+            "filename": self.file_name,
+            "date": self.date,
         }
