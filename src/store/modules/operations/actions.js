@@ -10,6 +10,7 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
 
     JSON.parse(res).data.forEach(x => USER_FILES.push({
       id: x.id,
+      isReady: x['is_ready'],
       checkbox: false,
       title: x.filename,
       icon: 'assignment',
@@ -23,6 +24,26 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
   } else {
     return 404
   }
+}
+
+const GET_COLUMN_NAMES = async (context, payload) => {
+  let response = await operationService.getColumnNames(payload)
+  return response.data
+}
+
+const POST_COLUMN_MAPPING = async (context, payload) => {
+  console.log(`payload is: ${payload}`)
+  let response = operationService.postColumnMapping({
+    columns: {
+      content: payload[0],
+      date: payload[1],
+      docid: payload[2],
+      source: payload[3],
+      title: payload[4]
+    },
+    id: payload[5]
+  })
+  return response.data
 }
 
 const CONCAT_FILES = async (context, payload) => {
@@ -52,6 +73,8 @@ export default {
   SET_HANDLE,
   CONCAT_FILES,
   SET_USER_FILES,
+  GET_COLUMN_NAMES,
+  POST_COLUMN_MAPPING,
   GET_FILE_NAMES_GIVEN_USER,
   DELETE_FILE_GIVEN_USER
 }

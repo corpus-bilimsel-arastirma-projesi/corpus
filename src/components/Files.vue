@@ -4,6 +4,7 @@
     <drag-and-drop
         id="drop1"
         :dropOptions="dropOptions"
+        @column-mapping="startColumnMapping"
     ></drag-and-drop>
 
     <!-- Error deleting file -->
@@ -129,6 +130,9 @@
       },
       openDeleteDialog(id, title) {
         this.$emit("delete-file-modal", id, title)
+      },
+      startColumnMapping(response) {
+        this.$emit('start-column-mapping', response)
       }
     }
   }
