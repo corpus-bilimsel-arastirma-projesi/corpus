@@ -8,14 +8,14 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
   if (JSON.parse(res).data) {
     let USER_FILES = []
 
-    JSON.parse(res).data.forEach(x => USER_FILES.push({
-      id: x.id,
-      isReady: x['is_ready'],
+    JSON.parse(res).data.forEach(file => USER_FILES.push({
+      id: file.id,
+      date: file.date,
       checkbox: false,
-      title: x.filename,
+      title: file.filename,
       icon: 'assignment',
-      iconClass: 'blue white--text',
-      subtitle: Date.now() // TODO: Get from DB
+      isReady: file['is_ready'],
+      iconClass: 'blue white--text'
     }))
 
     context.commit("SET_USER_FILES", USER_FILES)
@@ -27,23 +27,11 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
 }
 
 const GET_COLUMN_NAMES = async (context, payload) => {
-  let response = await operationService.getColumnNames(payload)
-  return response.data
+  return await operationService.getColumnNames(payload)
 }
 
 const POST_COLUMN_MAPPING = async (context, payload) => {
-  console.log(`payload is: ${payload}`)
-  let response = operationService.postColumnMapping({
-    columns: {
-      content: payload[0],
-      date: payload[1],
-      docid: payload[2],
-      source: payload[3],
-      title: payload[4]
-    },
-    id: payload[5]
-  })
-  return response.data
+  return await operationService.postColumnMapping(payload)
 }
 
 const CONCAT_FILES = async (context, payload) => {

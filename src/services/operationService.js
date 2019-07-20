@@ -3,6 +3,7 @@ import api from '@/services/api'
 export default {
   getColumnNames(payload) {
     return api.get(`file/column-names/${payload}/`)
+      .then(response => response.data)
   },
   postColumnMapping(payload) {
     return api.post(`file/column-mapping/`, payload)
