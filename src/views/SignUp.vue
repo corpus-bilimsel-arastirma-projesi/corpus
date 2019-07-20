@@ -26,12 +26,6 @@
             v-on:keyup="enterPressed"
         ></v-text-field>
 
-        <v-checkbox
-            v-model="checkbox"
-            :rules="[v => !!v || 'You must agree to continue!']"
-            label="Do you agree?"
-        ></v-checkbox>
-
         <div>
           <v-btn
               @click="reset"
@@ -112,7 +106,6 @@
         v => !!v || 'E-mail is required',
         v => /.+@.+/.test(v) || 'E-mail must be valid'
       ],
-      checkbox: false,
       errorMessage: null,
       errorDialog: false
     }),

@@ -1,7 +1,7 @@
-import stepService from '@/services/stepService'
+import operationService from '@/services/operationService'
 
 const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
-  let res = await stepService.postFileNamesGivenUser({
+  let res = await operationService.postFileNamesGivenUser({
     user: payload
   })
 
@@ -10,7 +10,6 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
 
     JSON.parse(res).data.forEach(x => USER_FILES.push({
       id: x.id,
-      uuid: x.uuid,
       checkbox: false,
       title: x.filename,
       icon: 'assignment',
@@ -26,8 +25,15 @@ const GET_FILE_NAMES_GIVEN_USER = async (context, payload) => {
   }
 }
 
+const CONCAT_FILES = async (context, payload) => {
+  return await operationService.postConcatFiles({
+    files: payload[0],
+    file_name: `MERGED ${payload[1].toString()}`
+  })
+}
+
 const DELETE_FILE_GIVEN_USER = (context, payload) => {
-  return stepService.deleteGivenFileName({
+  return operationService.deleteGivenFileName({
     data: {
       id: payload
     }
@@ -44,7 +50,8 @@ const SET_HANDLE = (context, payload) => {
 
 export default {
   SET_HANDLE,
-  GET_FILE_NAMES_GIVEN_USER,
+  CONCAT_FILES,
   SET_USER_FILES,
+  GET_FILE_NAMES_GIVEN_USER,
   DELETE_FILE_GIVEN_USER
 }

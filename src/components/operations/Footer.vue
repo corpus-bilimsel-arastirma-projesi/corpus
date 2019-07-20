@@ -1,12 +1,13 @@
 <template>
   <v-footer fixed class="pa-3 operation-footer" height="60" flat>
-    <v-btn class="operation-button" color="info" v-on:click="continueClick">
+    <v-btn :disabled="!IS_READY" class="operation-button" color="info" v-on:click="continueClick">
       {{buttonName}}
     </v-btn>
   </v-footer>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
 
   export default {
     name: "OperationFooter",
@@ -14,6 +15,11 @@
     data: () => ({}),
     props: {
       buttonName: {type: String, default: 'Continue'},
+    },
+    computed: {
+      ...mapGetters({
+        IS_READY: 'IS_READY'
+      })
     },
     methods: {
       continueClick() {
