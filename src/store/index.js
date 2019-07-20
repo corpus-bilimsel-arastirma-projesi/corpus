@@ -2,8 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import stepModule from './modules/step';
 import previewModule from './modules/plotly';
+import stepModule from './modules/operations';
 import authenticationModule from './modules/authentication';
 import createPersistedState from 'vuex-persistedstate'
 
