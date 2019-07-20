@@ -8,10 +8,12 @@ class File(models.Model):
     file_name = models.CharField(max_length=100)
     json = models.TextField(default='Json', null=False)
     edited_json = models.TextField(default='Json', blank=True)
+    is_ready = models.BooleanField(default=False)
 
     def as_dict(self):
         return {
             "id": self.id,
             "filename": self.file_name,
-            "date": self.date,
+            "date": str(self.date),
+            "is_ready": self.is_ready,
         }

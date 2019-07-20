@@ -3,6 +3,21 @@ import pandas as pd
 import re
 
 
+def column_names(data_frame):
+    return data_frame.columns
+
+
+def column_mapping(columns, data_frame):
+    data_frame.rename(columns={columns['content']: 'content',
+                               columns['date']: 'date',
+                               columns['source']: 'source',
+                               columns['title']: 'title',
+                               columns['docid']: 'docid'
+                               },
+                      inplace=True)
+    return data_frame.to_json()
+
+
 # to get file and convert into dataframe
 def json_to_data_frame(file):
     data_frame = pd.read_json(file)  # currently only json files

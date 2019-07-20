@@ -17,6 +17,8 @@ file_patterns = [
     path('delete-beginning/', DeleteBeginning.as_view()),
     path('delete-end/', DeleteEnd.as_view()),
     path('replace-words/', ReplaceWords.as_view()),
+    path('column-mapping/', ColumnMapping.as_view()),
+    path('column-names/<int:id>/', ColumnNames.as_view())
 ]
 
 urlpatterns = [

@@ -126,9 +126,9 @@ class PlotData(APIView):
         document = File.objects.get(id=request.GET['id'])
 
         plot_type = request.GET['type']
-        data_frame = json_to_data_frame(document.json)
+        data_frame = json_to_data_frame(document.edited_json)
 
-        if plot_type == "value_counter":
+        if plot_type == "value-counter":
             category = request.GET['category']
             number = int(request.GET['number'])
             figure = value_counter(category, number, data_frame)
@@ -136,7 +136,7 @@ class PlotData(APIView):
             data = json.dumps(figure, cls=plotly.utils.PlotlyJSONEncoder)
             return Response(data, status=status.HTTP_200_OK)
 
-        if plot_type == "stackedPlot":
+        if plot_type == "stacked-plot":
             category1 = request.GET['category1']
             category2 = request.GET['category2']
             figure = stacked_plot(category1, category2, data_frame)
@@ -144,7 +144,7 @@ class PlotData(APIView):
             data = json.dumps(figure, cls=plotly.utils.PlotlyJSONEncoder)
             return Response(data, status=status.HTTP_200_OK)
 
-        if plot_type == "multipleLinesGraph":
+        if plot_type == "multiple-lines-graph":
             category1 = request.GET['category1']
             category2 = request.GET['category2']
             figure = multiple_lines_graph(category1, category2, data_frame)
@@ -282,3 +282,28 @@ class ReplaceWords(APIView):
         file.save()
 
         return Response({'success': True})
+
+
+class ColumnMapping(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        file = File.objects.get(id=request.data['id'])
+        columns = request.data['columns']
+        data_frame = json_to_data_frame(file.edited_json)
+
+        file.edited_json = column_mapping(columns, data_frame)
+        file.save()
+
+        return Response({'success': True})
+
+
+class ColumnNames(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, id):
+        file = File.objects.get(id=id)
+        data_frame = json_to_data_frame(file.edited_json)
+        columns = column_names(data_frame)
+
+        return Response({'success': True, 'columns': columns})
