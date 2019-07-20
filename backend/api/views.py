@@ -158,6 +158,7 @@ class ConcatFile(APIView):
 
     def post(self, request):
         files = request.data['files']
+        file_name = request.data['file_name']
 
         files_to_concat = []
 
@@ -172,6 +173,7 @@ class ConcatFile(APIView):
         protected_file = File.objects.get(id=protected_file)
 
         protected_file.edited_json = data_frames
+        protected_file.file_name = file_name
         protected_file.save()
 
         for file in files:
