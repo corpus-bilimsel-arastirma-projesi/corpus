@@ -59,7 +59,7 @@ class CreateUserView(APIView):
         username = request.data['username']
         password = request.data['password']
         try:
-            user = User.objects.create_user(username, password)
+            user = User.objects.create_user(username=username, password=password)
 
             refresh = RefreshToken.for_user(user)
 
