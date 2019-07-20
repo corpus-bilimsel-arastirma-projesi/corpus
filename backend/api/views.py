@@ -303,7 +303,7 @@ class ColumnNames(APIView):
 
     def get(self, request, id):
         file = File.objects.get(id=id)
-        data_frame = json_to_data_frame(file.edited_json)
+        data_frame = json_to_data_frame(file.json)
         columns = column_names(data_frame)
 
         return Response({'success': True, 'columns': columns})
