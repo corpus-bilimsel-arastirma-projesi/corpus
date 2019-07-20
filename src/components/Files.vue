@@ -4,6 +4,7 @@
     <drag-and-drop
         id="drop1"
         :dropOptions="dropOptions"
+        @column-mapping="startColumnMapping"
     ></drag-and-drop>
 
     <!-- Error deleting file -->
@@ -67,7 +68,7 @@
 
                 <v-list-tile-content>
                   <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+                  <v-list-tile-sub-title>{{ item.date }}</v-list-tile-sub-title>
                 </v-list-tile-content>
 
                 <v-list-tile-action>
@@ -102,7 +103,7 @@
     },
     data: () => ({
       dropOptions: {
-        url: api.defaults.baseURL + "/upload/",
+        url: api.defaults.baseURL + "/file/upload/",
         headers: {Authorization: `Bearer ${store.getters.JWT_ACCESS}`},
         maxFilesize: 10, // MB
         maxFiles: 4,
@@ -117,9 +118,21 @@
     methods: {
       selectFile(title) {
         this.USER_FILES.forEach(x => x.title === title && (x.checkbox = !x.checkbox))
+
+        for (let i = 0; i < this.USER_FILES.length; i++) {
+          if(this.USER_FILES[i].checkbox === true) {
+            this.$store.commit('SET_IS_READY', true)
+            break
+          } else {
+            this.$store.commit('SET_IS_READY', false)
+          }
+        }
       },
       openDeleteDialog(id, title) {
         this.$emit("delete-file-modal", id, title)
+      },
+      startColumnMapping(response) {
+        this.$emit('start-column-mapping', response)
       }
     }
   }

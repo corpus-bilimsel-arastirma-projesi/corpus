@@ -4,13 +4,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import Vuetify from 'vuetify'
-import UUID from 'vue-uuid'
 import Tooltip from 'vue-directive-tooltip'
 import 'vue-directive-tooltip/css/index.css'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify)
-Vue.use(UUID)
 Vue.use(Tooltip, {
   delay: 50,
   placement: 'top',

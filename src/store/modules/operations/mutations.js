@@ -1,18 +1,17 @@
-const SET_UUID = (state, payload) => {
-  state.UUID = payload
-}
-
 const SET_USER_FILES = (state, payload) => {
   state.USER_FILES = payload
 }
 
+const SET_IS_READY = (state, payload) => {
+  state.IS_READY = payload
+}
+
 const DEFAULT_STEP_STATES = (state) => {
-  state.UUID = ''
   state.USER_FILES = []
 }
 
 export default {
-  SET_UUID,
+  SET_IS_READY,
   SET_USER_FILES,
   DEFAULT_STEP_STATES
-};
+}

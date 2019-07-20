@@ -1,6 +1,7 @@
 <template>
   <drop
       ref="drop"
+      id="operation-drag-drop"
       :options="dropOptions"
       @vdropzone-complete="afterComplete"
       v-on:vdropzone-sending="sendingEvent"
@@ -14,10 +15,9 @@
 </template>
 
 <script>
-  import {uuid} from 'vue-uuid'
   import drop from 'vue2-dropzone'
   import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-  import {mapMutations, mapGetters, mapActions} from 'vuex'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: 'Uploader',
@@ -27,39 +27,17 @@
     components: {
       drop
     },
-    mounted: function () {
-      this.GET_USER_FILES()
-    },
     computed: {
       ...mapGetters({
         JWT_ACCESS: 'JWT_ACCESS'
       })
     },
     methods: {
-      ...mapMutations({
-        SET_UUID: "SET_UUID",
-      }),
-      ...mapActions({
-        GET_FILE_NAMES_GIVEN_USER: "GET_FILE_NAMES_GIVEN_USER",
-      }),
-      afterComplete(file) {
-        console.log(file)
-        console.log(file.status)
-        this.GET_USER_FILES()
-      },
-      async GET_USER_FILES() {
-        let status = await this.GET_FILE_NAMES_GIVEN_USER(this.$store.getters.EMAIL)
-        if (status === 200) {
-          console.log(`User is authenticated.`)
-        } else if (status === 404) {
-          console.log(`User needs to authenticate!!!`)
-        }
+      afterComplete(response) {
+        this.$emit('column-mapping', response)
       },
       sendingEvent(file, xhr, formData) {
-        let uuid = this.$uuid.v1()
-        this.SET_UUID(uuid)
-        formData.append('remark', "Hello World")
-        formData.append('uuid', uuid)
+        formData.append('file_name', file.name)
         formData.append('jwt', this.JWT_ACCESS)
       },
       removeAllFiles() {

@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-db.sqlite3
 /dist
 /venv
 __pycache__

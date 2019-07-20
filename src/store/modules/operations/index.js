@@ -3,8 +3,8 @@ import getters from './getters';
 import mutations from './mutations';
 
 const state = {
-  UUID: '',
-  USER_FILES: []
+  USER_FILES: [],
+  IS_READY: false
 }
 
 export default {
