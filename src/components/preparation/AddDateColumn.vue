@@ -26,7 +26,7 @@
 
 <script>
 
-  import {mapActions, mapGetters} from "vuex"
+  import {mapActions, mapGetters, mapMutations} from "vuex"
 
   export default {
     data() {
@@ -42,14 +42,21 @@
     },
 
     methods: {
+      ...mapMutations({
+        SET_COLUMNS: 'SET_COLUMNS'
+      }),
       ...mapActions({
-        ADD_DATE_COLUMN: 'ADD_DATE_COLUMN'
+        ADD_DATE_COLUMN: 'ADD_DATE_COLUMN',
+        GET_COLUMN_NAMES_PREPARATION: 'GET_COLUMN_NAMES_PREPARATION'
       }),
       async addDateColumn() {
+        let response = await this.GET_COLUMN_NAMES_PREPARATION(this.FILE_ID)
+        response.success === true && this.SET_COLUMNS(response.columns)
+
         this.selected.forEach(async date => {
           let response = await this.ADD_DATE_COLUMN({
-            date_var: date.toLowerCase(),
-            id: 1
+            id: this.FILE_ID,
+            date_var: date.toLowerCase()
           })
           if (response.success === true) {
             // TODO:

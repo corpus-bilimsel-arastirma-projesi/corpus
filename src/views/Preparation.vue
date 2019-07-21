@@ -12,7 +12,7 @@
         <add-date-column ref="addDateColumn"></add-date-column>
 
         <v-btn color="primary" @click="addDateColumn">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
+        <v-btn flat disabled>Back</v-btn>
       </v-stepper-content>
 
 
@@ -22,7 +22,7 @@
         <delete-between ref="deleteBetween"></delete-between>
 
         <v-btn color="primary" @click="deleteBetween">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
+        <v-btn flat @click="back">Back</v-btn>
       </v-stepper-content>
 
 
@@ -32,7 +32,7 @@
         <delete-word ref="deleteWord"></delete-word>
 
         <v-btn color="primary" @click="deleteWord">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
+        <v-btn flat @click="back">Back</v-btn>
       </v-stepper-content>
 
 
@@ -42,7 +42,7 @@
         <delete-contain ref="deleteContain"></delete-contain>
 
         <v-btn color="primary" @click="deleteContain">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
+        <v-btn flat @click="back">Back</v-btn>
       </v-stepper-content>
 
 
@@ -52,7 +52,7 @@
         <delete-beginning ref="deleteBeginning"></delete-beginning>
 
         <v-btn color="primary" @click="deleteBeginning">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
+        <v-btn flat @click="back">Back</v-btn>
       </v-stepper-content>
 
 
@@ -62,7 +62,7 @@
         <delete-end ref="deleteEnd"></delete-end>
 
         <v-btn color="primary" @click="deleteEnd">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
+        <v-btn flat @click="back">Back</v-btn>
       </v-stepper-content>
 
 
@@ -72,7 +72,7 @@
         <replace-word ref="replaceWords"></replace-word>
 
         <v-btn color="primary" @click="replaceWords">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
+        <v-btn flat @click="back">Back</v-btn>
       </v-stepper-content>
 
     </v-stepper>
@@ -100,6 +100,9 @@
     },
 
     methods: {
+      back() {
+        this.e6 = this.e6 - 1
+      },
       addDateColumn() {
         this.e6 = 2
         this.$refs.addDateColumn.addDateColumn()

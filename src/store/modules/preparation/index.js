@@ -3,7 +3,8 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
-  FILE_ID: null
+  COLUMNS: [],
+  FILE_ID: null,
 }
 
 export default {

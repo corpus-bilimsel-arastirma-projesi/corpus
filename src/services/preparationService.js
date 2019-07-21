@@ -1,6 +1,10 @@
 import api from '@/services/api'
 
 export default {
+  getColumnNames(payload) {
+    return api.get(`file/column-names/${payload}/`)
+      .then(response => response.data)
+  },
   postAddDateColumn(payload) {
     return api.post(`file/add-date-column/`, payload)
       .then(response => response.data)

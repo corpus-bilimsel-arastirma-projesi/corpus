@@ -28,6 +28,10 @@ const DELETE_BEGINNING = async (context, payload) => {
   return await preparationService.postDeleteBeginning(payload)
 }
 
+const GET_COLUMN_NAMES_PREPARATION = async (context, payload) => {
+  return await preparationService.getColumnNames(payload)
+}
+
 export default {
   DELETE_END,
   DELETE_WORD,
@@ -35,5 +39,6 @@ export default {
   DELETE_BETWEEN,
   DELETE_CONTAIN,
   ADD_DATE_COLUMN,
-  DELETE_BEGINNING
+  DELETE_BEGINNING,
+  GET_COLUMN_NAMES_PREPARATION
 }

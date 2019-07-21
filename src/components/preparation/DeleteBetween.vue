@@ -29,6 +29,16 @@
       </v-flex>
 
     </v-layout>
+
+    <v-layout row>
+      <v-select
+          :items="COLUMNS"
+          label="Choose..."
+          required
+          @input="value => column = value"
+      ></v-select>
+    </v-layout>
+
   </v-card>
 </template>
 
@@ -37,13 +47,15 @@
 
   export default {
     data: () => ({
-      startWord: null,
-      endWord: null
+      column: null,
+      endWord: null,
+      startWord: null
     }),
 
     computed: {
       ...mapGetters({
-        FILE_ID: 'FILE_ID'
+        FILE_ID: 'FILE_ID',
+        COLUMNS: 'COLUMNS'
       })
     },
 
@@ -53,9 +65,10 @@
       }),
       async deleteBetween() {
         let response = await this.DELETE_BETWEEN({
-          start_word: this.startWord,
+          id: this.FILE_ID,
+          column: this.column,
           end_word: this.endWord,
-          id: 1
+          start_word: this.startWord
         })
         if (response.success === true) {
           // TODO:

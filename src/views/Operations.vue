@@ -122,8 +122,8 @@
 
 <script>
   import Files from '../components/Files'
-  import {mapGetters, mapActions} from 'vuex'
   import {initSession} from '../session-manager'
+  import {mapGetters, mapActions, mapMutations} from 'vuex'
   import OperationFooter from '../components/operations/Footer'
   import ProgressBar from '../components/operations/ProgressBar'
 
@@ -160,6 +160,9 @@
       this.GET_USER_FILES()
     },
     methods: {
+      ...mapMutations({
+        SET_FILE_ID: 'SET_FILE_ID'
+      }),
       ...mapActions({
         CONCAT_FILES: 'CONCAT_FILES',
         GET_COLUMN_NAMES: 'GET_COLUMN_NAMES',
@@ -255,14 +258,15 @@
         this.messageProgress = 'Processing...'
         this.previewProgress = true
 
-        let status = await this.GET_PREVIEW_SOURCES(id)
+        // let status = await this.GET_PREVIEW_SOURCES(id)
 
-        if (status === 200) {
-          this.previewProgress = false
-          this.$router.push({path: '/plotly'})
-        } else {
-          setTimeout(() => this.previewProgress = false, 2000) // TODO: Falsy
-        }
+        // if (status === 200) {
+        this.SET_FILE_ID(id)
+        this.previewProgress = false
+        this.$router.push({path: '/preparation'})
+        // } else {
+        //   setTimeout(() => this.previewProgress = false, 2000) // TODO: Falsy
+        // }
 
       },
       processColumnMapping(response) {
