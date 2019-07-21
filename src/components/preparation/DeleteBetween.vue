@@ -14,7 +14,7 @@
 
       <v-flex xs12 sm6 class="mr-2">
         <v-text-field
-            v-model="first"
+            v-model="startWord"
             label="Start Word"
             outline
         ></v-text-field>
@@ -22,7 +22,7 @@
 
       <v-flex xs12 sm6 class="ml-2">
         <v-text-field
-            v-model="last"
+            v-model="endWord"
             label="End Word"
             outline
         ></v-text-field>
@@ -33,7 +33,36 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from "vuex"
+
   export default {
-    data: () => ({})
+    data: () => ({
+      startWord: null,
+      endWord: null
+    }),
+
+    computed: {
+      ...mapGetters({
+        FILE_ID: 'FILE_ID'
+      })
+    },
+
+    methods: {
+      ...mapActions({
+        DELETE_BETWEEN: 'DELETE_BETWEEN'
+      }),
+      async deleteBetween() {
+        let response = await this.DELETE_BETWEEN({
+          start_word: this.startWord,
+          end_word: this.endWord,
+          id: 1
+        })
+        if (response.success === true) {
+          // TODO:
+        } else {
+          // TODO:
+        }
+      }
+    }
   }
 </script>

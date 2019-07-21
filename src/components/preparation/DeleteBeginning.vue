@@ -14,7 +14,7 @@
 
       <v-flex xs12 sm12 class="ml-2">
         <v-text-field
-            v-model="last"
+            v-model="startWord"
             label="Delete Beginning"
             outline
         ></v-text-field>
@@ -25,7 +25,34 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from "vuex"
+
   export default {
-    data: () => ({})
+    data: () => ({
+      startWord: null
+    }),
+
+    computed: {
+      ...mapGetters({
+        FILE_ID: 'FILE_ID'
+      })
+    },
+
+    methods: {
+      ...mapActions({
+        DELETE_BEGINNING: 'DELETE_BEGINNING'
+      }),
+      async deleteBetween() {
+        let response = await this.DELETE_BEGINNING({
+          start: this.startWord,
+          id: 1
+        })
+        if (response.success === true) {
+          // TODO:
+        } else {
+          // TODO:
+        }
+      }
+    }
   }
 </script>

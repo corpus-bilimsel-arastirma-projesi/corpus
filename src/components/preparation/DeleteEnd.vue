@@ -14,7 +14,7 @@
 
       <v-flex xs12 sm12 class="ml-2">
         <v-text-field
-            v-model="last"
+            v-model="end"
             label="Delete End"
             outline
         ></v-text-field>
@@ -25,7 +25,34 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from "vuex"
+
   export default {
-    data: () => ({})
+    data: () => ({
+      end: null,
+    }),
+
+    computed: {
+      ...mapGetters({
+        FILE_ID: 'FILE_ID'
+      })
+    },
+
+    methods: {
+      ...mapActions({
+        DELETE_END: 'DELETE_END'
+      }),
+      async deleteEnd() {
+        let response = await this.DELETE_END({
+          end: this.end,
+          id: 1
+        })
+        if (response.success === true) {
+          // TODO:
+        } else {
+          // TODO:
+        }
+      }
+    }
   }
 </script>

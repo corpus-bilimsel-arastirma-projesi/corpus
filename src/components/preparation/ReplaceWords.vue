@@ -15,7 +15,6 @@
       <v-flex xs12 sm12>
         <v-combobox
             v-model="chips"
-            :items="items"
             label="Your favorite hobbies"
             chips
             clearable
@@ -40,7 +39,7 @@
 
       <v-flex xs12 sm12 class="ml-2">
         <v-text-field
-            v-model="last"
+            v-model="targetWord"
             label="Replace Word"
             outline
         ></v-text-field>
@@ -51,16 +50,39 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from "vuex"
+
   export default {
     data: () => ({
+      targetWord: null,
       chips: ['aRtificial', 'ArTificial', 'artifiCialll', 'artificiaL'],
-      // items: ['Streaming', 'Eating']
     }),
 
+    computed: {
+      ...mapGetters({
+        FILE_ID: 'FILE_ID'
+      })
+    },
+
     methods: {
+      ...mapActions({
+        REPLACE_WORDS: 'REPLACE_WORDS'
+      }),
       remove(item) {
         this.chips.splice(this.chips.indexOf(item), 1)
         this.chips = [...this.chips]
+      },
+      async replaceWords() {
+        let response = await this.REPLACE_WORDS({
+          word_list: this.chips,
+          target_word: this.targetWord,
+          id: 1
+        })
+        if (response.success === true) {
+          // TODO:
+        } else {
+          // TODO:
+        }
       }
     }
   }

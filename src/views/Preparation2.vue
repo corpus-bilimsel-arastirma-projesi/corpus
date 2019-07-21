@@ -33,8 +33,8 @@
 </template>
 
 <script>
-  import DayMonthYear from '../components/preparation/DayMonthYear'
-  import StartWordEndWord from '../components/preparation/StartWordEndWord'
+  import DayMonthYear from '../components/preparation/AddDateColumn'
+  import StartWordEndWord from '../components/preparation/DeleteBetween'
   import DeleteWord from '../components/preparation/DeleteWord'
   import DeleteContain from '../components/preparation/DeleteContain'
   import DeleteBeginning from '../components/preparation/DeleteBeginning'

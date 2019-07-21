@@ -14,7 +14,7 @@
 
       <v-flex xs12 sm12 class="ml-2">
         <v-text-field
-            v-model="last"
+            v-model="word"
             label="Delete Contain"
             outline
         ></v-text-field>
@@ -25,7 +25,34 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from "vuex";
+
   export default {
-    data: () => ({})
+    data: () => ({
+      word: null
+    }),
+
+    computed: {
+      ...mapGetters({
+        FILE_ID: 'FILE_ID'
+      })
+    },
+
+    methods: {
+      ...mapActions({
+        DELETE_CONTAIN: 'DELETE_CONTAIN'
+      }),
+      async deleteContain() {
+        let response = await this.DELETE_CONTAIN({
+          word: this.word,
+          id: 1
+        })
+        if (response.success === true) {
+          // TODO:
+        } else {
+          // TODO:
+        }
+      }
+    }
   }
 </script>

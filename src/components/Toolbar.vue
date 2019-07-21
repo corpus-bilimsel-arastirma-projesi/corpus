@@ -62,7 +62,7 @@
       mobileItems(hasToken) {
         return hasToken !== null ? [
           {title: 'Home', link: '/'},
-          {title: 'operations', link: '/operations'},
+          {title: 'Operations', link: '/operations'},
           {title: 'Profile', link: '/profile'}
         ] : [
           {title: 'Home', link: '/'},
