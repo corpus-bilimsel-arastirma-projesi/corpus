@@ -203,11 +203,12 @@ class DeleteBetween(APIView):
     def post(self, request):
         start_word = request.data['start_word']
         end_word = request.data['end_word']
+        column = request.data['column']
 
         file = File.objects.get(id=request.data['id'])
         data_frame = json_to_data_frame(file.edited_json)
 
-        file.edited_json = delete_between(start_word, end_word, data_frame)
+        file.edited_json = delete_between(start_word, end_word, data_frame, column)
         file.save()
 
         return Response({'success': True})
@@ -218,10 +219,12 @@ class DeleteWord(APIView):
 
     def post(self, request):
         word = request.data['word']
+        column = request.data['column']
+
         file = File.objects.get(id=request.data['id'])
         data_frame = json_to_data_frame(file.edited_json)
 
-        file.edited_json = delete_word(word, data_frame)
+        file.edited_json = delete_word(word, data_frame, column)
         file.save()
 
         return Response({'success': True})
@@ -232,10 +235,12 @@ class DeleteContain(APIView):
 
     def post(self, request):
         word = request.data['word']
+        column = request.data['column']
+
         file = File.objects.get(id=request.data['id'])
         data_frame = json_to_data_frame(file.edited_json)
 
-        file.edited_json = delete_contain(word, data_frame)
+        file.edited_json = delete_contain(word, data_frame, column)
         file.save()
 
         return Response({'success': True})
@@ -246,10 +251,12 @@ class DeleteBeginning(APIView):
 
     def post(self, request):
         start = request.data['start']
+        column = request.data['column']
+
         file = File.objects.get(id=request.data['id'])
         data_frame = json_to_data_frame(file.edited_json)
 
-        file.edited_json = delete_beginning(start, data_frame)
+        file.edited_json = delete_beginning(start, data_frame, column)
         file.save()
 
         return Response({'success': True})
@@ -260,10 +267,12 @@ class DeleteEnd(APIView):
 
     def post(self, request):
         end = request.data['end']
+        column = request.data['column']
+
         file = File.objects.get(id=request.data['id'])
         data_frame = json_to_data_frame(file.edited_json)
 
-        file.edited_json = delete_end(end, data_frame)
+        file.edited_json = delete_end(end, data_frame, column)
         file.save()
 
         return Response({'success': True})
@@ -275,6 +284,7 @@ class ReplaceWords(APIView):
     def post(self, request):
         word_list = request.data['word_list']
         target_word = request.data['target_word']
+
         file = File.objects.get(id=request.data['id'])
         data_frame = json_to_data_frame(file.edited_json)
 

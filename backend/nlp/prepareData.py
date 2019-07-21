@@ -49,42 +49,42 @@ def choose_date(date_var, data_frame):
 
 # optional cleaning methods
 # to delete all characters between given words (included given words)
-def delete_between(start_word, end_word, data_frame):
+def delete_between(start_word, end_word, data_frame, column):
     pattern = start_word + "(.*)" + end_word
     for j in range(len(data_frame)):
-        data_frame.iloc[j] = re.sub(pattern, '', data_frame.iloc[j], flags=re.DOTALL)
+        data_frame[column].iloc[j] = re.sub(pattern, '', data_frame[column].iloc[j], flags=re.DOTALL)
     return data_frame.to_json()
 
 
 # to delete specific word
-def delete_word(word, data_frame):
+def delete_word(word, data_frame, column):
     pattern = r" " + word + " "
     for j in range(len(data_frame)):
-        data_frame.iloc[j] = re.sub(pattern, ' ', data_frame.iloc[j], flags=re.DOTALL)
+        data_frame[column].iloc[j] = re.sub(pattern, ' ', data_frame[column].iloc[j], flags=re.DOTALL)
     return data_frame.to_json()
 
 
 # delete words that contains given characterset
-def delete_contain(word, data_frame):
+def delete_contain(word, data_frame, column):
     pattern = word
     for j in range(len(data_frame)):
-        data_frame.iloc[j] = re.sub(pattern, '', data_frame.iloc[j], flags=re.DOTALL)
+        data_frame[column].iloc[j] = re.sub(pattern, '', data_frame[column].iloc[j], flags=re.DOTALL)
     return data_frame.to_json()
 
 
 # to delete words that starts with given characterset
-def delete_beginning(start, data_frame):
+def delete_beginning(start, data_frame, column):
     pattern = start + r'[a-zA-Z0-9_.+-]+'
     for j in range(len(data_frame)):
-        data_frame.iloc[j] = re.sub(pattern, "", data_frame.iloc[j])
+        data_frame[column].iloc[j] = re.sub(pattern, "", data_frame[column].iloc[j])
     return data_frame.to_json()
 
 
 # to delete words that ends with given characterset
-def delete_end(end, data_frame):
+def delete_end(end, data_frame, column):
     pattern = r'[a-zA-Z0-9_.+-]+' + end
     for j in range(len(data_frame)):
-        data_frame.iloc[j] = re.sub(pattern, "", data_frame.iloc[j])
+        data_frame[column].iloc[j] = re.sub(pattern, "", data_frame[column].iloc[j])
     return data_frame.to_json()
 
 
@@ -142,3 +142,5 @@ def clean_data_frame(data_frame, category):
 # value count of given dataframeslice
 def show_value_counts(data_frame_slice):
     return data_frame_slice.value_counts()
+
+
