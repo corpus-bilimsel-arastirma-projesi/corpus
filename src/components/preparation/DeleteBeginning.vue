@@ -31,6 +31,8 @@
       ></v-select>
     </v-layout>
 
+    <v-btn color="primary" :loading="loading" @click="deleteBetween">Apply</v-btn>
+
   </v-card>
 </template>
 
@@ -40,6 +42,7 @@
   export default {
     data: () => ({
       column: null,
+      loading: false,
       startWord: null
     }),
 
@@ -55,13 +58,15 @@
         DELETE_BEGINNING: 'DELETE_BEGINNING'
       }),
       async deleteBetween() {
+        this.loading = true
+
         let response = await this.DELETE_BEGINNING({
           id: this.FILE_ID,
           column: this.column,
           start: this.startWord
         })
         if (response.success === true) {
-          // TODO:
+          this.loading = false // TODO:
         } else {
           // TODO:
         }

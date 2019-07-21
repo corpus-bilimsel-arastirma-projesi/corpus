@@ -32,6 +32,8 @@
       ></v-select>
     </v-layout>
 
+    <v-btn color="primary" :loading="false" @click="deleteEnd">Apply</v-btn>
+
   </v-card>
 </template>
 
@@ -41,7 +43,8 @@
   export default {
     data: () => ({
       end: null,
-      column: null
+      column: null,
+      loading: false
     }),
 
     computed: {
@@ -56,13 +59,15 @@
         DELETE_END: 'DELETE_END'
       }),
       async deleteEnd() {
+        this.loading = true
+
         let response = await this.DELETE_END({
           end: this.end,
           id: this.FILE_ID,
           column: this.column
         })
         if (response.success === true) {
-          // TODO:
+          this.loading = false // TODO:
         } else {
           // TODO:
         }

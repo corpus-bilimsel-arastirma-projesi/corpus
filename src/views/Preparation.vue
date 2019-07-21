@@ -71,7 +71,7 @@
 
         <replace-word ref="replaceWords"></replace-word>
 
-        <v-btn color="primary" @click="replaceWords">Continue</v-btn>
+        <v-btn color="primary" @click="replaceWords">PLOT</v-btn>
         <v-btn flat @click="back">Back</v-btn>
       </v-stepper-content>
 
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from "vuex"
   import AddDateColumn from '../components/preparation/AddDateColumn'
   import DeleteBetween from '../components/preparation/DeleteBetween'
   import DeleteWord from '../components/preparation/DeleteWord'
@@ -99,37 +100,53 @@
       AddDateColumn, DeleteBetween, DeleteWord, DeleteContain, DeleteBeginning, DeleteEnd, ReplaceWord
     },
 
+    computed: {
+      ...mapGetters({
+        FILE_ID: 'FILE_ID'
+      }),
+    },
+
     methods: {
+      ...mapActions({
+        GET_PREVIEW_SOURCES: 'GET_PREVIEW_SOURCES'
+      }),
       back() {
         this.e6 = this.e6 - 1
       },
       addDateColumn() {
         this.e6 = 2
-        this.$refs.addDateColumn.addDateColumn()
+        // this.$refs.addDateColumn.addDateColumn()
       },
       deleteBetween() {
         this.e6 = 3
-        this.$refs.deleteBetween.deleteBetween()
+        // this.$refs.deleteBetween.deleteBetween()
       },
       deleteWord() {
         this.e6 = 4
-        this.$refs.deleteWord.deleteWord()
+        // this.$refs.deleteWord.deleteWord()
       },
       deleteContain() {
         this.e6 = 5
-        this.$refs.deleteContain.deleteContain()
+        // this.$refs.deleteContain.deleteContain()
       },
       deleteBeginning() {
         this.e6 = 6
-        this.$refs.deleteBeginning.deleteBeginning()
+        // this.$refs.deleteBeginning.deleteBeginning()
       },
       deleteEnd() {
         this.e6 = 7
-        this.$refs.deleteEnd.deleteEnd()
+        // this.$refs.deleteEnd.deleteEnd()
       },
-      replaceWords() {
-        this.e6 = 1
-        this.$refs.replaceWords.replaceWords()
+      async replaceWords() {
+        // this.e6 = 1
+        // this.$refs.replaceWords.replaceWords()
+
+        let status = await this.GET_PREVIEW_SOURCES(this.FILE_ID)
+        if (status === 200) {
+          this.$router.push({path: '/plotly'})
+        } else {
+          // TODO: Falsy
+        }
       }
     }
   }

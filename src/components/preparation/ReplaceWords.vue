@@ -46,6 +46,9 @@
       </v-flex>
 
     </v-layout>
+
+    <v-btn color="primary" :loading="loading" @click="replaceWords">Apply</v-btn>
+
   </v-card>
 </template>
 
@@ -54,6 +57,7 @@
 
   export default {
     data: () => ({
+      loading: false,
       targetWord: null,
       chips: ['aRtificial', 'ArTificial', 'artifiCialll', 'artificiaL'],
     }),
@@ -73,13 +77,15 @@
         this.chips = [...this.chips]
       },
       async replaceWords() {
+        this.loading = true
+
         let response = await this.REPLACE_WORDS({
           word_list: this.chips,
           target_word: this.targetWord,
           id: 1
         })
         if (response.success === true) {
-          // TODO:
+          this.loading = false // TODO:
         } else {
           // TODO:
         }

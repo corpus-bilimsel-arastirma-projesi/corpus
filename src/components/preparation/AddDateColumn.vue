@@ -21,6 +21,8 @@
         <v-checkbox v-model="selected" label="Year" value="Year"></v-checkbox>
       </v-flex>
     </v-layout>
+
+    <v-btn color="primary" :loading="loading" @click="addDateColumn">Apply</v-btn>
   </v-card>
 </template>
 
@@ -31,6 +33,7 @@
   export default {
     data() {
       return {
+        loading: false,
         selected: ['Day']
       }
     },
@@ -50,6 +53,8 @@
         GET_COLUMN_NAMES_PREPARATION: 'GET_COLUMN_NAMES_PREPARATION'
       }),
       async addDateColumn() {
+        this.loading = true
+
         let response = await this.GET_COLUMN_NAMES_PREPARATION(this.FILE_ID)
         response.success === true && this.SET_COLUMNS(response.columns)
 
@@ -59,7 +64,7 @@
             date_var: date.toLowerCase()
           })
           if (response.success === true) {
-            // TODO:
+            this.loading = false  // TODO:
           } else {
             // TODO:
           }

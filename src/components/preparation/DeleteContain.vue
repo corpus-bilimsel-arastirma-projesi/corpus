@@ -31,6 +31,8 @@
       ></v-select>
     </v-layout>
 
+    <v-btn color="primary" :loading="loading" @click="deleteContain">Apply</v-btn>
+
   </v-card>
 </template>
 
@@ -40,7 +42,8 @@
   export default {
     data: () => ({
       word: null,
-      column: null
+      column: null,
+      loading: false
     }),
 
     computed: {
@@ -55,13 +58,15 @@
         DELETE_CONTAIN: 'DELETE_CONTAIN'
       }),
       async deleteContain() {
+        this.loading = true
+
         let response = await this.DELETE_CONTAIN({
           id: this.FILE_ID,
           word: this.word,
           column: this.column
         })
         if (response.success === true) {
-          // TODO:
+          this.loading = false // TODO:
         } else {
           // TODO:
         }

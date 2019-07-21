@@ -167,7 +167,6 @@
         CONCAT_FILES: 'CONCAT_FILES',
         GET_COLUMN_NAMES: 'GET_COLUMN_NAMES',
         POST_COLUMN_MAPPING: 'POST_COLUMN_MAPPING',
-        GET_PREVIEW_SOURCES: 'GET_PREVIEW_SOURCES',
         DELETE_FILE_GIVEN_USER: 'DELETE_FILE_GIVEN_USER',
         GET_FILE_NAMES_GIVEN_USER: 'GET_FILE_NAMES_GIVEN_USER',
       }),
@@ -258,16 +257,9 @@
         this.messageProgress = 'Processing...'
         this.previewProgress = true
 
-        // let status = await this.GET_PREVIEW_SOURCES(id)
-
-        // if (status === 200) {
         this.SET_FILE_ID(id)
         this.previewProgress = false
         this.$router.push({path: '/preparation'})
-        // } else {
-        //   setTimeout(() => this.previewProgress = false, 2000) // TODO: Falsy
-        // }
-
       },
       processColumnMapping(response) {
         console.log(response)
