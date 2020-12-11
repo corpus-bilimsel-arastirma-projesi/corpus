@@ -5758,9 +5758,9 @@ inherits@~2.0.4:
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
 ini@~1.3.0:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.7.tgz#a09363e1911972ea16d7a8851005d84cf09a9a84"
+  integrity sha512-iKpRpXP+CrP2jyrxvg1kMUpXDyRUFDWurxbnVT1vQPx+Wz9uCYsMIqYuSBLV+PAaZG/d7kRLKRFc9oDMsH+mFQ==
 
 internal-ip@^4.3.0:
   version "4.3.0"
@@ -11535,13 +11535,6 @@ vue-cli-plugin-vuetify@^0.5.0:
   resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-0.5.0.tgz#14c9a61884da58cf6aaf8ff3309044931907f184"
   integrity sha512-TigfiZUs7SN3Z6uxKilqJUtYxte8vp0F4QxabCli6hkKPqU97JzAZc3P7AL6omkRAd2DMI26fOrIGjuALTvXww==
 
-vue-d3-network@^0.1.28:
-  version "0.1.28"
-  resolved "https://registry.yarnpkg.com/vue-d3-network/-/vue-d3-network-0.1.28.tgz#9cfa24f3c7e94a4218da425f1b2bf6387baa7802"
-  integrity sha512-36Id0gT/fMEK0i+rV7ikAbqXdB0wDHK9cBOlXDjLK2FYBB8yAExN82dYsmTF4GPiGx59hsQV/MvgWmercRjDww==
-  dependencies:
-    d3-force "^1.0.6"
-
 vue-directive-tooltip@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/vue-directive-tooltip/-/vue-directive-tooltip-1.5.1.tgz#bbec1f856ba4af84e6e44db4355b59cc9f3a4b4f"
@@ -11613,13 +11606,6 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
-
-vue-uuid@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/vue-uuid/-/vue-uuid-1.1.1.tgz#35cb6e314415d9e99c699c40c11201b7c2806048"
-  integrity sha512-iJ9zuLjWuVdaNOhoKLHl1Af1pkbk4e33upMesAulH6HqoV9rSDM+2gvP+duwQ4aQijouYHGzwRPzEZBqw7ruig==
-  dependencies:
-    uuid "^3.3.2"
 
 vue2-dropzone@^3.5.9:
   version "3.5.9"
